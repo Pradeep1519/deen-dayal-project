@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- ✅ FAVICON CONFIGURATION START -->
+    <!-- Main Favicon -->
+    <link rel="icon" type="image/x-icon" href="/fevicon/favicon.ico" />
+    
+    <!-- PNG Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/fevicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/fevicon/favicon-32x32.png">
+    
+    <!-- Apple Touch Icon (iOS) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/fevicon/apple-touch-icon.png">
+    
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/fevicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/fevicon/android-chrome-512x512.png">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/fevicon/site.webmanifest">
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#1e40af">
+    <meta name="msapplication-TileColor" content="#1e40af">
+    
+    <!-- Windows Tile Icon -->
+    <meta name="msapplication-TileImage" content="/fevicon/android-chrome-192x192.png">
+    
+    <!-- Safari Pinned Tab (Optional - यदि SVG है तो) -->
+    <!-- <link rel="mask-icon" href="/fevicon/safari-pinned-tab.svg" color="#1e40af"> -->
+    <!-- ✅ FAVICON CONFIGURATION END -->
+    
+    <title>DDJAY Portal -Deen Dayal Jan Awas Yojana Projects</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="All verified DDJAY projects under Deen Dayal Jan Awas Yojana. Live, upcoming &amp; closed projects with complete details.">
+    <meta name="keywords" content="DDJAY, Deen Dayal Jan Awas Yojana, affordable housing, Haryana plots, real estate, Gurugram, Sohna, Pataudi">
+    <meta name="author" content="DDJAY Portal">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ddjayportal.com/">
+    <meta property="og:title" content="DDJAY Portal - Verified Deen Dayal Jan Awas Yojana Projects">
+    <meta property="og:description" content="All verified DDJAY projects under Deen Dayal Jan Awas Yojana. Live, upcoming &amp; closed projects with complete details.">
+    <meta property="og:image" content="/fevicon/android-chrome-512x512.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ddjayportal.com/">
+    <meta property="twitter:title" content="DDJAY Portal - Verified Deen Dayal Jan Awas Yojana Projects">
+    <meta property="twitter:description" content="All verified DDJAY projects under Deen Dayal Jan Awas Yojana. Live, upcoming &amp; closed projects with complete details.">
+    <meta property="twitter:image" content="/fevicon/android-chrome-512x512.png">
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Performance Monitoring (Optional) -->
+    <script>
+      // Performance monitoring
+      window.addEventListener('load', function() {
+        if ('performance' in window) {
+          setTimeout(function() {
+            const perfEntries = performance.getEntriesByType('navigation');
+            if (perfEntries.length > 0) {
+              const navEntry = perfEntries[0];
+              console.log('Page loaded in:', navEntry.loadEventEnd - navEntry.startTime, 'ms');
+            }
+          }, 0);
+        }
+      });
+    </script>
+  </body>
+</html>
