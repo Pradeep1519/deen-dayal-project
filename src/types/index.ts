@@ -1,4 +1,52 @@
 export type ProjectStatus = 'live' | 'upcoming' | 'closed';
+export type ProjectType = 'residential' | 'commercial' | 'floors' | 'plots';
+
+export interface ProjectSectionConfig {
+  // Section titles customization
+  amenitiesTitle?: string;
+  documentsTitle?: string;
+  highlightsTitle?: string;
+  descriptionTitle?: string;
+  locationTitle?: string;
+}
+
+export interface CustomAmenity {
+  name: string;
+  icon: string; // car, home, building, etc.
+  description?: string;
+}
+
+export interface CustomSection {
+  id: string;
+  title: string;
+  content: string[];
+  icon?: string;
+  type?: 'list' | 'table' | 'text';
+}
+
+export interface ProjectCustomConfig {
+  // Project type
+  projectType: ProjectType;
+  
+  // Section titles
+  sections?: ProjectSectionConfig;
+  
+  // Custom amenities list
+  customAmenities?: CustomAmenity[];
+  
+  // Additional custom sections
+  customSections?: CustomSection[];
+  
+  // Document names customization
+  documentNames?: Record<string, string>;
+  
+  // Hide/show sections
+  hideSections?: {
+    amenities?: boolean;
+    highlights?: boolean;
+    location?: boolean;
+  };
+}
 
 export interface Project {
   id: string;
@@ -24,7 +72,13 @@ export interface Project {
     floor_plan_3bhk?: string;
     price_list?: string;
     brochure?: string;
+    sohna_master_plan?: string;
+    layout_plan?: string;
+    [key: string]: string | undefined;
   };
+  
+  // ✅ NEW: Project-specific configuration
+  customConfig?: ProjectCustomConfig;
 }
 
 export interface Lead {
