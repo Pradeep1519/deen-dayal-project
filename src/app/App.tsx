@@ -17,16 +17,15 @@ import { ContactPage } from '@/app/pages/ContactPage';
 import { Analytics } from '@vercel/analytics/react';
 import { useEffect, useState } from 'react';
 
-// ✅ Scroll Restoration Component - YEH ADD KARO
+// ✅ Scroll Restoration Component
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Har route change pe scroll to top
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'instant' // 'smooth' bhi use kar sakte ho
+      behavior: 'instant'
     });
   }, [pathname]);
 
@@ -43,7 +42,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <ScrollToTop /> {/* YEH ADD KARO LAYOUT KE ANDAR */}
+      <ScrollToTop />
       {showDisclaimer ? (
         <GovernmentDisclaimerModal onClose={handleCloseDisclaimer} />
       ) : (
@@ -57,7 +56,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ✅ Updated Page Wrapper Components
+// ✅ Page Wrapper Components
 function HomePageWrapper() {
   const navigate = useNavigate();
   return <HomePage onNavigate={(page, data) => navigate(`/${page}${data?.id ? `?id=${data.id}` : ''}`)} />;
@@ -121,7 +120,7 @@ function PrivacyPolicyPageWrapper() {
 export default function App() {
   return (
     <>
-      <ScrollToTop /> {/* YEH BHI ADD KARO */}
+      <ScrollToTop />
       <Routes>
         {/* Home Route */}
         <Route path="/" element={
@@ -194,6 +193,13 @@ export default function App() {
         <Route path="/privacy-policy" element={
           <Layout>
             <PrivacyPolicyPageWrapper />
+          </Layout>
+        } />
+        
+        {/* ✅ IMPORTANT: Add this catch-all route at the end */}
+        <Route path="*" element={
+          <Layout>
+            <HomePageWrapper />
           </Layout>
         } />
       </Routes>
