@@ -122,7 +122,7 @@ export function UpcomingProjectsPage() {
                       
                       {/* ✅ ADDED: BLINKING PRE-LAUNCH OFFER LINE */}
                       <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-1.5 px-3 rounded-lg animate-pulse font-bold text-sm">
-                        🚀 Pre-Launch Offer Open Soon
+                        🚀 Pre-Launch Offer 
                       </div>
                       
                       <div className="flex items-center gap-2">

@@ -131,6 +131,7 @@ export function ProjectDetailsPage() {
   if (status === 'upcoming') {
     headerColor = 'from-purple-600 to-purple-800';
     badgeText = '🚧 UPCOMING PROJECT';
+    badgeText += ' | PRE-LAUNCH open';
   } else if (projectType === 'floors') {
     headerColor = 'from-blue-600 to-blue-800';
     badgeText = '🏢 FLOOR PROJECT';

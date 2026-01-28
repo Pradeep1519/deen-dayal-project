@@ -108,10 +108,10 @@ export const PROJECTS_DATABASE = {
       project_name: 'Coming Soon: DDJAY Jhajjar Sector 7 Plots',
       location: 'Sector 7, Jhajjar, Haryana',
       status: 'upcoming' as const,
-      price_range: '₹55-65 Lakh/sq yd',
+      price_range: '₹55-70 sq yd',
       plot_sizes: ['104 sq yd to 157 sq yd'],
-      approval: 'TCP Approved, RERA: Coming Soon',
-      description: 'Premium residential plots with modern infrastructure and amenities. Pre-launch registration open with special discounts.',
+      approval: 'TCP Approved, RERA: RERA Recieved',
+      description: 'Discover thoughtfully planned residential plots under Deen Dayal Jan Awas Yojana in Sector 7, Jhajjar, strategically located on NH-352 (Rohtak–Rewari National Highway). This upcoming township offers the perfect blend of modern infrastructure, excellent connectivity, and future-ready living.',
       highlights: [
         '✅ Gated Community',
         '🛡️ 24/7 Security and CCTV Camera',
@@ -121,14 +121,14 @@ export const PROJECTS_DATABASE = {
         '🏛️ Club House',
         '📍 Jogging Track',
         '🏦 Bank Loan Facility',
-        '✅ Pre-launch Registration Open soon'
+        '✅ Pre-launch Registration Open'
       ],
       map_link: 'https://maps.google.com/?q=28.4100,77.3200',
       images: [
         'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop',
       ],
       video_url: '',
-      expected_launch: 'March 2026',
+      expected_launch: 'February 2026',
       rera_number: 'XXXXXXXXXXXX',
       documents: {},
       created_at: '2024-02-20T10:00:00Z',
@@ -146,14 +146,19 @@ export const PROJECTS_DATABASE = {
           { name: 'CCTV', icon: 'video' },
           { name: 'Jogging Track', icon: 'trending-up' },
           { name: 'Parking', icon: 'car' },
-          { name: 'Club House', icon: 'building' }
+          { name: 'Club House', icon: 'building' },
+          { name: 'Green Parks', icon: 'leaf' },
+          { name: 'Bank Loans', icon: 'bank' },
+          { name: '24/7 Security', icon: 'lock' },
+          { name: 'Underground Electricity', icon: 'zap' },
+          { name: 'Wide Roads', icon: 'road' ,}
         ],
         customSections: [
           {
             id: 'pre-launch',
             title: 'Pre-launch Benefits',
             content: [
-              'Early Bird Discount: 5%',
+              'Early Bird Discount',
               'Priority Allotment',
               'Flexible Payment Plans',
               'Special Financing Options'
@@ -168,7 +173,7 @@ export const PROJECTS_DATABASE = {
       project_name: 'Coming Soon: DDJAY Jhajjar Sector 27 Plots',
       location: 'Sector 27, Jhajjar, Haryana',
       status: 'upcoming' as const,
-      price_range: '₹52-70 Lakh/sq yd',
+      price_range: '₹52-70 sq yd',
       plot_sizes: ['140 sq yd', '165 sq yd', '200 sq yd'],
       approval: 'TCP Approved (Under Process), RERA: Applied',
       description: 'Premium residential plots with modern infrastructure and amenities. Pre-launch registration open with special discounts.',
@@ -206,7 +211,7 @@ export const PROJECTS_DATABASE = {
       project_name: 'Coming Soon: DDJAY Pataudi Sector 1 Plots',
       location: 'Sector 1, Pataudi, Haryana',
       status: 'upcoming' as const,
-      price_range: '₹79-90 Lakh/sq yd',
+      price_range: '₹79-90 sq yd',
       plot_sizes: ['125 to 150 sq yd'],
       approval: 'TCP Approved, RERA: Coming Soon',
       description: 'Premium residential plots with modern infrastructure and amenities. Pre-launch registration open with special discounts.',
