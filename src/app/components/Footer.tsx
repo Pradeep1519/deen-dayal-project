@@ -30,8 +30,8 @@ export function Footer() {
       </div>
 
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* About Section with Logo */}
           <div>
             <div className="flex items-start gap-3 mb-4">
@@ -47,13 +47,13 @@ export function Footer() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-bold text-white text-lg">DDJAY Portal</span>
+                  <span className="font-bold text-white text-base">DDJAY Portal</span>
                   <span className="text-xs bg-blue-600 px-2 py-0.5 rounded-full">Verified</span>
                 </div>
                 <p className="text-xs text-gray-400 mb-2">Under Deen Dayal Jan Awas Yojana</p>
               </div>
             </div>
-            <p className="text-sm mb-4">
+            <p className="text-xm mb-4">
               Your trusted independent platform for verified DDJAY project information and comparison.
             </p>
             <button
@@ -68,12 +68,12 @@ export function Footer() {
           {/* Quick Links Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Quick Links</h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-1.5 text-sm">
               <li>
                 <Link 
                   to="/" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Home
                 </Link>
@@ -82,7 +82,7 @@ export function Footer() {
                 <Link 
                   to="/what-is-ddjay" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   What is DDJAY
                 </Link>
@@ -91,7 +91,7 @@ export function Footer() {
                 <Link 
                   to="/live-projects" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Live Projects
                 </Link>
@@ -100,7 +100,7 @@ export function Footer() {
                 <Link 
                   to="/upcoming-projects" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Upcoming Projects
                 </Link>
@@ -109,7 +109,7 @@ export function Footer() {
                 <Link 
                   to="/closed-projects" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Closed Projects
                 </Link>
@@ -118,7 +118,7 @@ export function Footer() {
                 <Link 
                   to="/submit-requirement" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Submit Requirement
                 </Link>
@@ -134,7 +134,7 @@ export function Footer() {
                 <Link 
                   to="/terms-conditions" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Terms & Conditions
                 </Link>
@@ -143,7 +143,7 @@ export function Footer() {
                 <Link 
                   to="/privacy-policy" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Privacy Policy
                 </Link>
@@ -152,7 +152,7 @@ export function Footer() {
                 <Link 
                   to="/about" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   About Platform
                 </Link>
@@ -161,7 +161,7 @@ export function Footer() {
                 <Link 
                   to="/contact" 
                   onClick={scrollToTop}
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   Contact Us
                 </Link>
@@ -172,13 +172,13 @@ export function Footer() {
           {/* Contact Us Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Contact Us</h3>
-            <ul className="space-y-4 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 mt-1 flex-shrink-0" />
+                <Phone className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <a 
                     href="tel:+918799704639" 
-                    className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                    className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                   >
                     +91 87997 04639
                   </a>
@@ -189,7 +189,7 @@ export function Footer() {
                 <Mail className="w-5 h-5 mt-1 flex-shrink-0" />
                 <a 
                   href="mailto:support@ddjayprojects.org" 
-                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  className="hover:text-blue-400 transition-colors block py-1.5 active:text-blue-300"
                 >
                   support@ddjayprojects.org
                 </a>
@@ -203,7 +203,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar - ONLY copyright text centered */}
-        <div className="border-t border-gray-800 mt-12 pt-6">
+        <div className="border-t border-gray-800 mt-8 pt-4">
           <div className="text-center">
             <p className="text-sm text-gray-400">
               @SHOPIFARM © {new Date().getFullYear()} DDJAY Portal. All rights reserved.
