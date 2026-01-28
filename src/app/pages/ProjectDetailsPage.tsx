@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
 import { Button } from '@/app/components/ui/button';
 import { 
   ArrowLeft, MapPin, Calendar, IndianRupee, CheckCircle, 
@@ -143,6 +144,51 @@ export function ProjectDetailsPage() {
   // ========== RENDER FUNCTION ==========
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* ✅ PROJECT-SPECIFIC SEO HEADER */}
+      <Helmet>
+        <title>{`${project.project_name} | DDJAY Project in ${project.location} | ${project.price_range}`}</title>
+        <meta name="description" content={`${project.project_name} in ${project.location}. ${project.description.substring(0, 150)}... Price: ${project.price_range}, Plot sizes: ${project.plot_sizes.join(', ')}, Status: ${status}`} />
+        <meta name="keywords" content={`${project.project_name}, ddjay ${project.location}, plots in ${project.location}, ${project.location} real estate, affordable housing ${project.location}`} />
+        
+        {/* Open Graph for Social Sharing */}
+        <meta property="og:title" content={`${project.project_name} | DDJAY Project`} />
+        <meta property="og:description" content={`${project.description.substring(0, 100)}... Price: ${project.price_range}`} />
+        <meta property="og:image" content={project.images[0]} />
+        <meta property="og:url" content={`https://www.ddjayprojects.org/project-details?id=${project.id}`} />
+        <meta property="og:type" content="realestate.property" />
+        
+        {/* ✅ IMPORTANT: Project-specific Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "RealEstateListing",
+            "name": project.project_name,
+            "description": project.description.substring(0, 200),
+            "url": `https://www.ddjayprojects.org/project-details?id=${project.id}`,
+            "image": project.images[0],
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": project.location,
+              "addressRegion": "Haryana",
+              "addressCountry": "India"
+            },
+            "priceRange": project.price_range,
+            "numberOfRooms": project.plot_sizes.length.toString(),
+            "floorSize": project.plot_sizes.join(', '),
+            "amenityFeature": project.highlights?.map((h: string) => ({
+              "@type": "LocationFeatureSpecification",
+              "name": h
+            })),
+            "offers": {
+              "@type": "Offer",
+              "availability": status === 'live' ? 'https://schema.org/InStock' : 
+                             status === 'upcoming' ? 'https://schema.org/PreOrder' : 
+                             'https://schema.org/SoldOut'
+            }
+          })}
+        </script>
+      </Helmet>
+
       {/* HEADER SECTION */}
       <div className={`bg-gradient-to-r ${headerColor} text-white py-6`}>
         <div className="container mx-auto px-4">
@@ -206,7 +252,7 @@ export function ProjectDetailsPage() {
                     <div className="aspect-[16/9] relative">
                       <img 
                         src={project.images[currentImageIndex]} 
-                        alt={`Slide ${currentImageIndex + 1}`}
+                        alt={`${project.project_name} - Image ${currentImageIndex + 1}`}
                         className="w-full h-full object-cover transition-all duration-500"
                       />
                       
@@ -244,7 +290,7 @@ export function ProjectDetailsPage() {
                       >
                         <img 
                           src={img} 
-                          alt={`Thumb ${index + 1}`}
+                          alt={`${project.project_name} - Thumbnail ${index + 1}`}
                           className="w-full h-20 object-cover"
                         />
                         {index === currentImageIndex && (
@@ -466,6 +512,7 @@ export function ProjectDetailsPage() {
                   height="100%"
                   style={{ border: 0 }}
                   loading="lazy"
+                  title={`${project.project_name} Location Map`}
                 />
               </div>
               {project.map_link && (

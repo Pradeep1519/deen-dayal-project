@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://www.ddjayprojects.org/sitemap.xml
+
+# DDJAY Projects Crawling Instructions
+Crawl-delay: 2
+
+# Block image scrapers
+User-agent: Googlebot-Image
+Allow: /assets/
+
+# Block certain bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Crawl-delay: 10

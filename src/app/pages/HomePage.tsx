@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
 import { Search, MapPin, TrendingUp, BadgeCheck, CheckCircle, ArrowRight, Shield, Users, Clock, Award, AlertCircle, Building2, IndianRupee, Maximize2 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -28,6 +29,52 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {/* ✅ SEO HEADER - Ye sabse pehle add karo */}
+      <Helmet>
+        <title>DDJAY Projects | Deen Dayal Jan Awas Yojana | Haryana Affordable Housing</title>
+        <meta name="description" content="Verified DDJAY projects under Deen Dayal Jan Awas Yojana. Book plots in Gurugram, Sohna, Pataudi, Faridabad. Government approved affordable housing scheme." />
+        <meta name="keywords" content="DDJAY, Deen Dayal Jan Awas Yojana, ddjay projects, haryana plots, affordable housing, gurugram plots, sohna ddjay, pataudi plots, faridabad plots, real estate" />
+        
+        {/* Open Graph tags for Facebook/WhatsApp sharing */}
+        <meta property="og:title" content="DDJAY Projects | Deen Dayal Jan Awas Yojana" />
+        <meta property="og:description" content="Verified affordable housing projects under DDJAY scheme. Book your plot now!" />
+        <meta property="og:image" content="https://www.ddjayprojects.org/assets/logo/ddlogo.png" />
+        <meta property="og:url" content="https://www.ddjayprojects.org" />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="DDJAY Projects | Deen Dayal Jan Awas Yojana" />
+        <meta name="twitter:description" content="Book affordable plots in Haryana under DDJAY scheme" />
+        
+        {/* ✅ IMPORTANT: JSON-LD Structured Data for Google */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "RealEstateAgent",
+            "name": "DDJAY Portal",
+            "description": "Verified DDJAY Projects under Deen Dayal Jan Awas Yojana - Government approved affordable housing scheme in Haryana",
+            "url": "https://www.ddjayprojects.org",
+            "telephone": "+91-8799704639",
+            "email": "support@ddjayprojects.org",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Gurugram",
+              "addressRegion": "Haryana",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": "28.4595",
+              "longitude": "77.0266"
+            },
+            "openingHours": "Mo-Sa 09:00-19:00",
+            "priceRange": "₹10L - ₹50L",
+            "areaServed": ["Gurugram", "Sohna", "Pataudi", "Faridabad", "Manesar"]
+          })}
+        </script>
+      </Helmet>
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-50 to-gray-100 text-gray-900 py-16 md:py-24 overflow-hidden">
         
@@ -525,4 +572,4 @@ export function HomePage() {
       )}
     </div>
   );
-} 
+}

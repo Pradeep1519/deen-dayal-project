@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
 import { 
   Search, SlidersHorizontal, X, MapPin, Video, FileText, Download, 
   Calendar, CheckCircle, Phone, MessageSquare, User, ExternalLink,
@@ -103,6 +104,69 @@ export function LiveProjectsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* ✅ PAGE-SPECIFIC SEO HEADER */}
+      <Helmet>
+        <title>Live DDJAY Projects | Booking Open Now | Deen Dayal Jan Awas Yojana</title>
+        <meta name="description" content="View all live DDJAY projects with booking open now. Book plots in Gurugram, Sohna, Pataudi under Deen Dayal Jan Awas Yojana. RERA approved, affordable housing." />
+        <meta name="keywords" content="live ddjay projects, booking open ddjay, ddjay plots available, current ddjay projects, gurugram plots booking, sohna ddjay projects, affordable housing booking" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Live DDJAY Projects | Booking Open Now" />
+        <meta property="og:description" content="Book your plot in DDJAY projects with booking open now. Verified RERA approved projects." />
+        <meta property="og:url" content="https://www.ddjayprojects.org/live-projects" />
+        <meta property="og:type" content="website" />
+        
+        {/* ✅ IMPORTANT: Page-specific Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Live DDJAY Projects",
+            "description": "List of all live DDJAY projects with booking open",
+            "url": "https://www.ddjayprojects.org/live-projects",
+            "numberOfItems": filteredProjects.length,
+            "itemListElement": filteredProjects.map((project, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "RealEstateListing",
+                "name": project.project_name,
+                "description": project.description?.substring(0, 100),
+                "url": `https://www.ddjayprojects.org/project-details?id=${project.id}`,
+                "priceRange": project.price_range,
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": project.location,
+                  "addressRegion": "Haryana"
+                }
+              }
+            }))
+          })}
+        </script>
+        
+        {/* Breadcrumb Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.ddjayprojects.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Live Projects",
+                "item": "https://www.ddjayprojects.org/live-projects"
+              }
+            ]
+          })}
+        </script>
+      </Helmet>
+
       {/* Header Section */}
       <section className="bg-gradient-to-br from-green-600 to-green-800 text-white py-12">
         <div className="container mx-auto px-4">
@@ -215,6 +279,8 @@ export function LiveProjectsPage() {
                     <div 
                       key={project.id} 
                       className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
+                      itemScope
+                      itemType="https://schema.org/RealEstateListing"
                     >
                       {/* Project Image */}
                       <div className="h-48 relative overflow-hidden">
@@ -225,6 +291,7 @@ export function LiveProjectsPage() {
                           onError={(e) => {
                             e.currentTarget.src = '';
                           }}
+                          itemProp="image"
                         />
                         
                         {/* Status Badge */}
@@ -248,24 +315,27 @@ export function LiveProjectsPage() {
                           </Badge>
                         </div>
                         
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        <h3 
+                          className="text-xl font-bold text-gray-900 mb-2"
+                          itemProp="name"
+                        >
                           {project.project_name}
                         </h3>
                         
-                        <div className="flex items-start gap-2 text-gray-600 mb-3">
+                        <div className="flex items-start gap-2 text-gray-600 mb-3" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
                           <MapPin className="w-4 h-4 flex-shrink-0 mt-1" />
-                          <span className="text-sm line-clamp-2">{project.location}</span>
+                          <span className="text-sm line-clamp-2" itemProp="addressLocality">{project.location}</span>
                         </div>
                         
                         <div className="space-y-2 mb-4">
                           <div className="flex items-center gap-2">
                             <IndianRupee className="w-4 h-4 text-green-600" />
-                            <span className="font-bold text-lg text-gray-900">{project.price_range}</span>
+                            <span className="font-bold text-lg text-gray-900" itemProp="priceRange">{project.price_range}</span>
                           </div>
                           
                           <div className="flex items-center gap-2">
                             <Maximize2 className="w-4 h-4 text-blue-600" />
-                            <span className="text-gray-600">{project.plot_sizes.join(', ')}</span>
+                            <span className="text-gray-600" itemProp="floorSize">{project.plot_sizes.join(', ')}</span>
                           </div>
                           
                           <div className="flex items-center gap-2">
@@ -287,6 +357,7 @@ export function LiveProjectsPage() {
                           <Button
                             onClick={() => handleProjectClick(project.id)}
                             className="flex-1"
+                            itemProp="url"
                           >
                             View Details
                           </Button>

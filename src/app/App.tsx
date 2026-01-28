@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { HelmetProvider } from 'react-helmet-async'; // ✅ NEW: Import HelmetProvider
 import { Header } from '@/app/components/Header';
 import { Footer } from '@/app/components/Footer';
 import { HomePage } from '@/app/pages/HomePage';
@@ -17,7 +18,7 @@ import { ContactPage } from '@/app/pages/ContactPage';
 import { Analytics } from '@vercel/analytics/react';
 import { useEffect, useState } from 'react';
 
-// ✅ Scroll Restoration Component
+// ✅ Scroll Restoration Component - Har page change pe top pe scroll karega
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -32,7 +33,7 @@ function ScrollToTop() {
   return null;
 }
 
-// ✅ Custom Layout Component
+// ✅ Custom Layout Component - Sab pages ke liye common layout
 function Layout({ children }: { children: React.ReactNode }) {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   
@@ -119,7 +120,8 @@ function PrivacyPolicyPageWrapper() {
 // ✅ Main App Component
 export default function App() {
   return (
-    <>
+    // ✅ IMPORTANT: HelmetProvider wrap karo pure app ko
+    <HelmetProvider>
       <ScrollToTop />
       <Routes>
         {/* Home Route */}
@@ -196,7 +198,7 @@ export default function App() {
           </Layout>
         } />
         
-        {/* ✅ IMPORTANT: Add this catch-all route at the end */}
+        {/* ✅ IMPORTANT: Ye line add karo - 404 page handle karega */}
         <Route path="*" element={
           <Layout>
             <HomePageWrapper />
@@ -206,6 +208,6 @@ export default function App() {
       
       <Toaster position="top-right" />
       <Analytics />
-    </>
+    </HelmetProvider>
   );
 }
