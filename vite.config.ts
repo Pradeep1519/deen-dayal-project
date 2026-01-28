@@ -13,5 +13,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: './',
+  base: '/', // ✅ './' se '/' change karo
+  // ✅ Ye add karo
+  server: {
+    historyApiFallback: true,
+    host: true
+  },
+  // ✅ Build configuration
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  }
 })
