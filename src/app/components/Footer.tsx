@@ -49,38 +49,54 @@ export function Footer() {
             </p>
             <button
               onClick={handleWhatsApp}
-              className="w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 flex items-center justify-center transition-colors"
+              className="w-12 h-12 rounded-full bg-green-600 hover:bg-green-700 flex items-center justify-center transition-colors active:scale-95"
+              aria-label="Contact on WhatsApp"
             >
-              <MessageCircle className="w-5 h-5 text-white" />
+              <MessageCircle className="w-6 h-6 text-white" />
             </button>
           </div>
 
           {/* Quick Links Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/what-is-ddjay" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/what-is-ddjay" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   What is DDJAY
                 </Link>
               </li>
               <li>
-                <Link to="/live-projects" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/live-projects" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Live Projects
                 </Link>
               </li>
               <li>
-                <Link to="/upcoming-projects" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/upcoming-projects" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Upcoming Projects
                 </Link>
               </li>
               <li>
-                <Link to="/submit-requirement" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/submit-requirement" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Submit Requirement
                 </Link>
               </li>
@@ -90,24 +106,36 @@ export function Footer() {
           {/* Resources Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Legal</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/terms-conditions" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/terms-conditions" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="/privacy-policy" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/privacy-policy" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/about" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   About Platform
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-blue-400 transition-colors">
+                <Link 
+                  to="/contact" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   Contact Us
                 </Link>
               </li>
@@ -117,45 +145,42 @@ export function Footer() {
           {/* Contact Us Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Contact Us</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2">
-                <Phone className="w-4 h-4 mt-1 flex-shrink-0" />
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div>
-                  <a href="tel:+918799704639" className="hover:text-blue-400 transition-colors">
+                  <a 
+                    href="tel:+918799704639" 
+                    className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                  >
                     +91 87997 04639
                   </a>
-                  <p className="text-xs text-gray-400">Mon - Sat, 9 AM - 7 PM</p>
+                  <p className="text-xs text-gray-400 mt-1">Mon - Sat, 9 AM - 7 PM</p>
                 </div>
               </li>
-              <li className="flex items-start gap-2">
-                <Mail className="w-4 h-4 mt-1 flex-shrink-0" />
-                <a href="mailto:support@ddjayprojects.org" className="hover:text-blue-400 transition-colors">
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 mt-1 flex-shrink-0" />
+                <a 
+                  href="mailto:support@ddjayprojects.org" 
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
                   support@ddjayprojects.org
                 </a>
               </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span>Gurugram, Haryana, India</span>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
+                <span className="block py-2">Gurugram, Haryana, India</span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar - ONLY copyright text centered */}
         <div className="border-t border-gray-800 mt-12 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-center md:text-left mb-4 md:mb-0">
+          <div className="text-center">
+            <p className="text-sm text-gray-400">
               @SHOPIFARM © {new Date().getFullYear()} DDJAY Portal. All rights reserved.
             </p>
-            
-            <div className="flex items-center gap-6 text-sm">
-              <Link to="/terms-conditions" className="text-gray-400 hover:text-white transition-colors">
-                Terms & Conditions
-              </Link>
-              <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">
-                Privacy Policy
-              </Link>
-            </div>
           </div>
         </div>
       </div>
