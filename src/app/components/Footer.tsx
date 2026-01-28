@@ -6,6 +6,15 @@ export function Footer() {
     window.open('https://wa.me/918799704639?text=Hi, I want to know about DDJAY projects', '_blank');
   };
 
+  // Function to scroll to top when any link is clicked
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <footer className="bg-gray-900 text-gray-300">
       {/* Disclaimer Banner */}
@@ -63,6 +72,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Home
@@ -71,6 +81,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/what-is-ddjay" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   What is DDJAY
@@ -79,6 +90,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/live-projects" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Live Projects
@@ -87,6 +99,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/upcoming-projects" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Upcoming Projects
@@ -94,7 +107,17 @@ export function Footer() {
               </li>
               <li>
                 <Link 
+                  to="/closed-projects" 
+                  onClick={scrollToTop}
+                  className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
+                >
+                  Closed Projects
+                </Link>
+              </li>
+              <li>
+                <Link 
                   to="/submit-requirement" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Submit Requirement
@@ -103,13 +126,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resources Section */}
+          {/* Legal Section */}
           <div>
             <h3 className="font-bold text-white mb-4">Legal</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link 
                   to="/terms-conditions" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Terms & Conditions
@@ -118,6 +142,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/privacy-policy" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Privacy Policy
@@ -126,6 +151,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/about" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   About Platform
@@ -134,6 +160,7 @@ export function Footer() {
               <li>
                 <Link 
                   to="/contact" 
+                  onClick={scrollToTop}
                   className="hover:text-blue-400 transition-colors block py-2 active:text-blue-300"
                 >
                   Contact Us

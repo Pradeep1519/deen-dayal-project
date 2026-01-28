@@ -17,6 +17,22 @@ import { ContactPage } from '@/app/pages/ContactPage';
 import { Analytics } from '@vercel/analytics/react';
 import { useEffect, useState } from 'react';
 
+// ✅ Scroll Restoration Component - YEH ADD KARO
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Har route change pe scroll to top
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant' // 'smooth' bhi use kar sakte ho
+    });
+  }, [pathname]);
+
+  return null;
+}
+
 // ✅ Custom Layout Component
 function Layout({ children }: { children: React.ReactNode }) {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
@@ -27,6 +43,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop /> {/* YEH ADD KARO LAYOUT KE ANDAR */}
       {showDisclaimer ? (
         <GovernmentDisclaimerModal onClose={handleCloseDisclaimer} />
       ) : (
@@ -104,6 +121,7 @@ function PrivacyPolicyPageWrapper() {
 export default function App() {
   return (
     <>
+      <ScrollToTop /> {/* YEH BHI ADD KARO */}
       <Routes>
         {/* Home Route */}
         <Route path="/" element={
