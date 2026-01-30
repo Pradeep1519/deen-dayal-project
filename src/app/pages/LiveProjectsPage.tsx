@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
+import { Helmet } from 'react-helmet-async';
 import { 
   Search, SlidersHorizontal, X, MapPin, Video, FileText, Download, 
   Calendar, CheckCircle, Phone, MessageSquare, User, ExternalLink,
-  IndianRupee, Maximize2, Building2, ChevronRight
+  IndianRupee, Maximize2, Building2, ChevronRight, Zap
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -92,12 +92,17 @@ export function LiveProjectsPage() {
   };
 
   const handleWhatsApp = (project: Project) => {
-    const message = `Hi, I'm interested in ${project.project_name} at ${project.location}. Please share more details.`;
+    const message = `Hi, I'm interested in ${project.project_name} at ${project.location}. Price: ${project.price_range}. Please share more details.`;
     window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleProjectClick = (projectId: string) => {
     navigate(`/project-details?id=${projectId}`);
+  };
+
+  // ✅ NEW: Quick Enquiry with Form Open
+  const handleQuickEnquiry = (project: Project) => {
+    navigate(`/project-details?id=${project.id}&showForm=true`);
   };
 
   const hasActiveFilters = search || filters.location || filters.minPrice || filters.maxPrice || filters.plotSize;
@@ -278,7 +283,7 @@ export function LiveProjectsPage() {
                   return (
                     <div 
                       key={project.id} 
-                      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300"
+                      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 group"
                       itemScope
                       itemType="https://schema.org/RealEstateListing"
                     >
@@ -287,7 +292,7 @@ export function LiveProjectsPage() {
                         <img
                           src={project.images[0]}
                           alt={project.project_name}
-                          className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             e.currentTarget.src = '';
                           }}
@@ -313,6 +318,11 @@ export function LiveProjectsPage() {
                           <Badge className="bg-green-100 text-green-800 border-green-300">
                             {isGreenValley ? 'DDJAY FLOORS' : 'RESIDENTIAL'}
                           </Badge>
+                          {project.rera_number && project.rera_number !== 'XXXXXXXXXXXX' && (
+                            <Badge className="bg-blue-100 text-blue-800 border-blue-300 text-xs">
+                              RERA Approved
+                            </Badge>
+                          )}
                         </div>
                         
                         <h3 
@@ -345,14 +355,14 @@ export function LiveProjectsPage() {
                         </div>
                         
                         {/* Highlights Preview */}
-                        {isGreenValley && project.highlights.slice(0, 2).map((highlight, index) => (
+                        {project.highlights && project.highlights.slice(0, 2).map((highlight, index) => (
                           <div key={index} className="flex items-start gap-2 mb-1">
                             <CheckCircle className="w-3 h-3 text-green-500 mt-1 flex-shrink-0" />
                             <span className="text-xs text-gray-700 font-medium">{highlight}</span>
                           </div>
                         ))}
                         
-                        {/* Action Buttons */}
+                        {/* ✅ UPDATED: Action Buttons with Quick Enquiry */}
                         <div className="flex gap-2 mt-4">
                           <Button
                             onClick={() => handleProjectClick(project.id)}
@@ -362,13 +372,31 @@ export function LiveProjectsPage() {
                             View Details
                           </Button>
                           
+                          {/* ✅ QUICK ENQUIRY BUTTON */}
+                          <Button
+                            onClick={() => handleQuickEnquiry(project)}
+                            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700"
+                            size="sm"
+                          >
+                            <Zap className="w-4 h-4 mr-1" />
+                            Quick Enquiry
+                          </Button>
+                          
                           <Button
                             onClick={() => handleWhatsApp(project)}
                             variant="outline"
                             className="flex-shrink-0"
+                            size="sm"
                           >
                             <MessageSquare className="w-4 h-4" />
                           </Button>
+                        </div>
+                        
+                        {/* Quick Info Footer */}
+                        <div className="mt-4 pt-4 border-t border-gray-100">
+                          <p className="text-xs text-gray-500 text-center">
+                            Click "Quick Enquiry" to go directly to enquiry form
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -391,22 +419,71 @@ export function LiveProjectsPage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8">How To Book Your Plot</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-blue-600 font-bold text-xl">1</span>
+                </div>
+                <h3 className="font-bold mb-2">Browse Projects</h3>
+                <p className="text-sm text-gray-600">
+                  View all live DDJAY projects with complete details
+                </p>
+              </div>
+              <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-green-600 font-bold text-xl">2</span>
+                </div>
+                <h3 className="font-bold mb-2">Fill Enquiry Form</h3>
+                <p className="text-sm text-gray-600">
+                  Use "Quick Enquiry" or go to project page for detailed form
+                </p>
+              </div>
+              <div className="text-center p-6 border rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-purple-600 font-bold text-xl">3</span>
+                </div>
+                <h3 className="font-bold mb-2">Get Callback & Site Visit</h3>
+                <p className="text-sm text-gray-600">
+                  Our team contacts you within 30 minutes for site visit
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       {filteredProjects.length > 0 && (
         <section className="py-12 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
+              <h2 className="text-3xl font-bold mb-4">Need Help Choosing?</h2>
               <p className="text-gray-600 mb-6">
-                Submit your requirement and our experts will help you find the perfect DDJAY project
+                Our experts will help you select the perfect DDJAY project based on your requirements
               </p>
-              <Button 
-                onClick={() => navigate('/submit-requirement')} 
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
-              >
-                Submit Your Requirement
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  onClick={() => navigate('/submit-requirement')} 
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                >
+                  Submit Your Requirement
+                </Button>
+                <Button 
+                  onClick={() => window.open('https://wa.me/918799704639', '_blank')}
+                  size="lg"
+                  variant="outline"
+                  className="border-green-600 text-green-600 hover:bg-green-50"
+                >
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  WhatsApp Consultation
+                </Button>
+              </div>
             </div>
           </div>
         </section>

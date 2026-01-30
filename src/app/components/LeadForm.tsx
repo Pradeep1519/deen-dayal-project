@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { Textarea } from '@/app/components/ui/textarea';
-import { MessageCircle, CheckCircle, Mail } from 'lucide-react';
+import { MessageCircle, CheckCircle, Mail, IndianRupee, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LeadFormProps {
@@ -35,23 +35,63 @@ export function LeadForm({
   });
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [projectInfo, setProjectInfo] = useState<any>(null);
 
   // ✅ FINAL APPS SCRIPT URL
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjtcEhZRx9N6aQh-myhdeG0kXgq80mWLHELNH5bWu9ANKiZZJdcvj-a8f3hMLcq-6s/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSHrMLB2hYTOSBFP1xbdme2lzDM0_6KeILg31qcRPwL3k2IK2fVPCM_WjeWbfI-Ypu/exec';
 
-  // ✅ GOOGLE SHEETS SAVE ONLY (NO LOCALSTORAGE)
+  // Get current page URL for tracking
+  useEffect(() => {
+    // Try to get project info from URL or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlProjectId = urlParams.get('id');
+    
+    if (urlProjectId && projectId) {
+      // You can fetch project details here if needed
+      setProjectInfo({
+        id: projectId,
+        name: projectName,
+        url: window.location.href
+      });
+    }
+  }, [projectId, projectName]);
+
+  // ✅ GOOGLE SHEETS SAVE WITH PROJECT DETAILS
   const saveToGoogleSheets = (leadData: any) => {
     const sheetData = {
+      // TIMESTAMP
+      timestamp: new Date().toISOString(),
+      date: new Date().toLocaleDateString('en-IN'),
+      time: new Date().toLocaleTimeString('en-IN'),
+      
+      // USER DETAILS
       name: leadData.name || '',
       mobile: leadData.mobile || '',
       email: leadData.email || '',
       budget: leadData.budget || '',
       requirement: leadData.requirement || '',
       purpose: leadData.purpose || '',
-      project: leadData.project_name || '',
-      source_page: leadData.source_page || 'unknown',
-      type: 'Lead_Form',
-      status: 'New Lead'
+      
+      // PROJECT DETAILS
+      project_id: projectId || '',
+      project_name: projectName || leadData.project_name || '',
+      project_location: '', // You can pass this if available
+      project_price: '', // You can pass this if available
+      
+      // FORM DETAILS
+      source_page: sourcePage,
+      form_type: 'Project_Specific_Enquiry',
+      form_title: title,
+      
+      // SYSTEM DETAILS
+      page_url: window.location.href,
+      status: 'New Lead',
+      priority: 'High',
+      
+      // ADDITIONAL FIELDS FOR BETTER TRACKING
+      enquiry_type: showRequirement ? 'Detailed Enquiry' : 'Basic Enquiry',
+      follow_up_status: 'Pending',
+      assigned_to: 'Sales Team'
     };
 
     // ✅ Send to Google Sheets (no-cors mode)
@@ -60,6 +100,10 @@ export function LeadForm({
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sheetData)
+    }).then(() => {
+      console.log('✅ Data sent to Google Sheets');
+    }).catch(error => {
+      console.error('❌ Error sending to Google Sheets:', error);
     });
   };
 
@@ -81,15 +125,22 @@ export function LeadForm({
       return;
     }
 
-    // ✅ IMMEDIATE WHATSAPP OPEN
-    const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}.${formData.requirement ? ' Requirement: ' + formData.requirement : ''} Please share details.`;
-    window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
+    // ✅ IMMEDIATE WHATSAPP OPEN WITH PROJECT DETAILS
+    const whatsappMessage = `Hi, I'm ${formData.name}. 
+I'm interested in ${projectName || 'DDJAY Project'}. 
+My mobile: ${formData.mobile}
+${formData.email ? `Email: ${formData.email}` : ''}
+${formData.requirement ? `Requirement: ${formData.requirement}` : ''}
+${formData.budget ? `Budget: ${formData.budget}` : ''}
+Please share complete details and arrange site visit.`;
+
+    window.open(`https://wa.me/918799704639?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
     
     // ✅ SHOW SUCCESS IMMEDIATELY
     setSubmitted(true);
-    toast.success('✅ WhatsApp opened! Our team will contact you shortly.');
+    toast.success('✅ WhatsApp opened! Our team will contact you within 30 minutes.');
     
-    // ✅ BACKGROUND SAVE TO GOOGLE SHEETS
+    // ✅ BACKGROUND SAVE TO GOOGLE SHEETS WITH PROJECT DETAILS
     const leadData = {
       name: formData.name,
       mobile: formData.mobile,
@@ -102,6 +153,44 @@ export function LeadForm({
     };
     
     saveToGoogleSheets(leadData);
+    
+    // Optional: Reset form after 5 seconds
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        mobile: '',
+        email: '',
+        budget: '',
+        requirement: '',
+        purpose: '',
+      });
+      setAgreeTerms(false);
+    }, 5000);
+  };
+
+  // ✅ PROJECT INFO BANNER
+  const ProjectInfoBanner = () => {
+    if (!projectName) return null;
+    
+    return (
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="font-bold text-blue-800 flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              Enquiring About:
+            </h4>
+            <p className="text-blue-900 font-semibold text-lg">{projectName}</p>
+            {projectId && (
+              <p className="text-blue-600 text-sm">Project ID: {projectId}</p>
+            )}
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-blue-700">Form will save project details automatically</p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (submitted) {
@@ -114,8 +203,19 @@ export function LeadForm({
         <p className="text-gray-600 mb-4">
           WhatsApp opened! Our team will contact you within 30 minutes.
           <br />
-          <span className="text-sm text-green-600">✓ Data saved successfully</span>
+          <span className="text-sm text-green-600">✓ Project enquiry saved successfully</span>
         </p>
+        
+        {projectName && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+            <p className="text-sm text-green-800">
+              <strong>Project:</strong> {projectName}
+            </p>
+            <p className="text-xs text-green-700">
+              Your enquiry has been recorded for this project
+            </p>
+          </div>
+        )}
         
         <div className="space-y-3">
           <Button
@@ -144,6 +244,9 @@ export function LeadForm({
 
   return (
     <div className="bg-white rounded-lg border shadow-sm p-6">
+      {/* PROJECT INFO BANNER */}
+      {ProjectInfoBanner()}
+      
       <h3 className="font-bold text-xl mb-2">{title}</h3>
       <p className="text-sm text-gray-600 mb-6">{description}</p>
 
@@ -255,25 +358,31 @@ export function LeadForm({
           </div>
         </div>
 
+        {/* INFO BANNER */}
         <div className="bg-blue-50 p-3 rounded-md">
           <p className="text-xs text-blue-800">
             <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
           </p>
           <p className="text-xs text-blue-800 mt-1">
-            <strong>✓ Google Sheets Save:</strong> Data saves directly to Google Sheets
+            <strong>✓ Google Sheets Save:</strong> Project enquiry data saves directly to Google Sheets
           </p>
+          {projectName && (
+            <p className="text-xs text-blue-800 mt-1">
+              <strong>📌 Project Linked:</strong> Your enquiry will be linked to "{projectName}"
+            </p>
+          )}
         </div>
 
         <Button 
           type="submit" 
-          className="w-full" 
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800" 
           disabled={!agreeTerms}
         >
           Submit & Open WhatsApp
         </Button>
 
         <p className="text-xs text-center text-gray-500">
-          Submit → WhatsApp opens instantly → Data saves to Google Sheets
+          Submit → WhatsApp opens instantly → Project enquiry saved to Google Sheets
         </p>
       </form>
     </div>

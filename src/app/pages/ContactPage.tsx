@@ -19,7 +19,7 @@ export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
 
   // ✅ FINAL APPS SCRIPT URL
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjtcEhZRx9N6aQh-myhdeG0kXgq80mWLHELNH5bWu9ANKiZZJdcvj-a8f3hMLcq-6s/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSHrMLB2hYTOSBFP1xbdme2lzDM0_6KeILg31qcRPwL3k2IK2fVPCM_WjeWbfI-Ypu/exec';
 
   const handleWhatsApp = () => {
     window.open('https://wa.me/918799704639?text=Hi, I want to know about DDJAY projects', '_blank');

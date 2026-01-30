@@ -2,21 +2,25 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/app/components/ui/button';
 import { 
   ArrowLeft, MapPin, Calendar, IndianRupee, CheckCircle, 
   FileText, Download, Phone, MessageSquare, Home, 
   Building, Car, Leaf, Shield, Droplets, Palette, Dumbbell,
-  ExternalLink, ChevronLeft, ChevronRight
+  ExternalLink, ChevronLeft, ChevronRight, User, MessageCircle,
+  Mail, FileEdit, X
 } from 'lucide-react';
 import { getAllProjects } from '@/data/projects';
+import { LeadForm } from '@/app/components/LeadForm';
+import { toast } from 'sonner';
 
 export function ProjectDetailsPage() {
   const navigate = useNavigate();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false); // ✅ Modal state
   const sliderRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -31,14 +35,14 @@ export function ProjectDetailsPage() {
     setLoading(false);
   }, []);
 
-  // ========== AUTO SLIDER FUNCTION ==========
+  // Auto slider
   useEffect(() => {
     if (project?.images && project.images.length > 1) {
       sliderRef.current = setInterval(() => {
         setCurrentImageIndex((prevIndex) => 
           (prevIndex + 1) % project.images.length
         );
-      }, 5000); // 5 seconds
+      }, 5000);
 
       return () => {
         if (sliderRef.current) {
@@ -56,11 +60,20 @@ export function ProjectDetailsPage() {
   };
 
   const handleWhatsApp = () => {
-    const message = `Hi, I'm interested in ${project?.project_name} at ${project?.location}. Please share more details.`;
+    const message = `Hi, I'm interested in ${project?.project_name} at ${project?.location}. Price: ${project?.price_range}. Please share more details.`;
     window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  // ========== SLIDER CONTROLS ==========
+  const handleCall = () => {
+    window.location.href = 'tel:+918799704639';
+  };
+
+  const handleEmail = () => {
+    const subject = `Enquiry for ${project?.project_name}`;
+    const body = `Hello,\n\nI am interested in ${project?.project_name} located at ${project?.location}.\n\nPlease send me complete details, pricing, and availability.\n\nThank you.`;
+    window.location.href = `mailto:support@ddjayprojects.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   const nextImage = () => {
     if (project?.images) {
       setCurrentImageIndex((prevIndex) => 
@@ -81,7 +94,6 @@ export function ProjectDetailsPage() {
     setCurrentImageIndex(index);
   };
 
-  // ========== AMENITIES ICONS MAPPING ==========
   const getAmenityIcon = (iconName: string) => {
     const iconMap: { [key: string]: any } = {
       'building': <Building className="w-6 h-6" />,
@@ -97,7 +109,49 @@ export function ProjectDetailsPage() {
     return iconMap[iconName] || <CheckCircle className="w-6 h-6" />;
   };
 
-  // ========== LOADING & ERROR STATES ==========
+  // ✅ MODAL COMPONENT
+  const EnquiryModal = () => {
+    if (!showEnquiryModal) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden relative">
+          {/* ✅ MODAL HEADER WITH X BUTTON */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <MessageCircle className="w-8 h-8" />
+                <div>
+                  <h2 className="text-2xl font-bold">Enquire About This Project</h2>
+                  <p className="text-blue-100">{project.project_name} • {project.location}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowEnquiryModal(false)}
+                className="text-white hover:bg-white/20 p-2 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+          
+          {/* ✅ MODAL CONTENT - LEAD FORM */}
+          <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+            <LeadForm
+              projectId={project.id}
+              projectName={project.project_name}
+              sourcePage={`project-details-modal-${project.id}`}
+              title={`Enquiry for: ${project.project_name}`}
+              description={`Fill this form to get complete details, site visit, and pricing for ${project.project_name} in ${project.location}. We'll contact you within 30 minutes.`}
+              showBudget={true}
+              showRequirement={true}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -122,7 +176,6 @@ export function ProjectDetailsPage() {
     );
   }
 
-  // ========== DETERMINE PROJECT TYPE & HEADER ==========
   const projectType = project.customConfig?.projectType || 'plots';
   const status = project.status;
 
@@ -131,8 +184,7 @@ export function ProjectDetailsPage() {
   
   if (status === 'upcoming') {
     headerColor = 'from-purple-600 to-purple-800';
-    badgeText = '🚧 UPCOMING PROJECT';
-    badgeText += ' | PRE-LAUNCH open';
+    badgeText = '🚧 UPCOMING PROJECT | PRE-LAUNCH';
   } else if (projectType === 'floors') {
     headerColor = 'from-blue-600 to-blue-800';
     badgeText = '🏢 FLOOR PROJECT';
@@ -141,7 +193,6 @@ export function ProjectDetailsPage() {
     badgeText = '✅ COMPLETED PROJECT';
   }
 
-  // ========== RENDER FUNCTION ==========
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ✅ PROJECT-SPECIFIC SEO HEADER */}
@@ -150,14 +201,12 @@ export function ProjectDetailsPage() {
         <meta name="description" content={`${project.project_name} in ${project.location}. ${project.description.substring(0, 150)}... Price: ${project.price_range}, Plot sizes: ${project.plot_sizes.join(', ')}, Status: ${status}`} />
         <meta name="keywords" content={`${project.project_name}, ddjay ${project.location}, plots in ${project.location}, ${project.location} real estate, affordable housing ${project.location}`} />
         
-        {/* Open Graph for Social Sharing */}
         <meta property="og:title" content={`${project.project_name} | DDJAY Project`} />
         <meta property="og:description" content={`${project.description.substring(0, 100)}... Price: ${project.price_range}`} />
         <meta property="og:image" content={project.images[0]} />
         <meta property="og:url" content={`https://www.ddjayprojects.org/project-details?id=${project.id}`} />
         <meta property="og:type" content="realestate.property" />
         
-        {/* ✅ IMPORTANT: Project-specific Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -299,21 +348,6 @@ export function ProjectDetailsPage() {
                       </button>
                     ))}
                   </div>
-                  
-                  {/* SLIDER DOTS */}
-                  <div className="flex justify-center gap-2 mt-4">
-                    {project.images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => goToImage(index)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          index === currentImageIndex 
-                            ? 'bg-blue-600 w-6' 
-                            : 'bg-gray-300 hover:bg-gray-400'
-                        }`}
-                      />
-                    ))}
-                  </div>
                 </div>
               </div>
             )}
@@ -365,7 +399,7 @@ export function ProjectDetailsPage() {
                   <h2 className="text-2xl font-bold mb-4">
                     {project.customConfig?.sections?.descriptionTitle || 'Project Overview'}
                   </h2>
-                  <p className="text-gray-700 leading-relaxed">{project.description}</p>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{project.description}</p>
                 </div>
               </div>
             )}
@@ -374,26 +408,28 @@ export function ProjectDetailsPage() {
           {/* RIGHT COLUMN - SIDEBAR */}
           <div className="space-y-6">
             
-            {/* ACTION BUTTONS */}
+            {/* ✅ UPDATED: ACTION BUTTONS WITH MODAL TRIGGER */}
             <div className={`bg-gradient-to-br ${headerColor} text-white rounded-xl shadow-lg p-6`}>
               <h3 className="text-xl font-bold mb-4 text-center">
-                {status === 'upcoming' ? 'Pre-register Now' : 
-                 status === 'closed' ? 'Enquirey For Management Quota' : 'Book Now'}
+                Quick Actions
               </h3>
+              
               <div className="space-y-3">
+                {/* ✅ MAIN BUTTON: FILL ENQUIRY FORM (MODAL TRIGGER) */}
                 <Button 
-                  onClick={() => navigate('/submit-requirement')} 
-                  className="w-full py-4 text-lg bg-white hover:bg-gray-100"
+                  onClick={() => setShowEnquiryModal(true)}
+                  className="w-full py-4 text-lg bg-white hover:bg-gray-100 font-bold"
                   style={{ 
                     color: headerColor.includes('blue') ? '#1d4ed8' : 
                            headerColor.includes('purple') ? '#7c3aed' : 
                            headerColor.includes('green') ? '#059669' : '#4b5563' 
                   }}
                 >
-                  {status === 'upcoming' ? '📝 Pre-register' : 
-                   status === 'closed' ? '📩 Enquire Now' : '📋 Book Now'}
+                  <FileEdit className="w-5 h-5 mr-2" />
+                  Fill Enquiry Form
                 </Button>
                 
+                {/* WhatsApp Button */}
                 <Button 
                   onClick={handleWhatsApp}
                   className="w-full py-4 bg-green-600 hover:bg-green-700 text-white"
@@ -401,12 +437,52 @@ export function ProjectDetailsPage() {
                   <MessageSquare className="w-5 h-5 mr-2" /> WhatsApp Inquiry
                 </Button>
                 
+                {/* Call Button */}
                 <Button 
-                  onClick={() => window.open(`tel:+918799704639`)}
-                  className="w-full py-4 border border-white/30 text-white hover:bg-white/10"
+                  onClick={handleCall}
+                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  <Phone className="w-5 h-5 mr-2" /> Call for Site Visit
+                  <Phone className="w-5 h-5 mr-2" /> Call Now
                 </Button>
+                
+                {/* Email Button */}
+                <Button 
+                  onClick={handleEmail}
+                  className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Mail className="w-5 h-5 mr-2" /> Email Inquiry
+                </Button>
+              </div>
+              
+              {/* QUICK PROJECT INFO */}
+              <div className="mt-6 pt-6 border-t border-white/30">
+                <h4 className="font-bold mb-3">Project Summary:</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-white/80">Project:</span>
+                    <span className="font-medium">{project.project_name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-white/80">Location:</span>
+                    <span className="font-medium">{project.location}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-white/80">Price Range:</span>
+                    <span className="font-medium text-yellow-300">{project.price_range}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-white/80">Plot Sizes:</span>
+                    <span className="font-medium">{project.plot_sizes?.join(', ')}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-white/80">Status:</span>
+                    <span className="font-medium">
+                      {status === 'live' ? '🟢 Booking Open' : 
+                       status === 'upcoming' ? '🟣 Coming Soon' : 
+                       '⚫ Completed'}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -529,6 +605,29 @@ export function ProjectDetailsPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ✅ MODAL COMPONENT */}
+      <EnquiryModal />
+
+      {/* ✅ FLOATING WHATSAPP BUTTON */}
+      <div 
+        onClick={handleWhatsApp}
+        className="fixed bottom-4 left-4 z-40 bg-green-500 text-white p-3 rounded-full shadow-2xl cursor-pointer hover:bg-green-600 transition-all duration-300 hover:scale-110"
+      >
+        <MessageSquare className="w-6 h-6" />
+      </div>
+
+      {/* ✅ FLOATING ENQUIRY BUTTON FOR MOBILE */}
+      <div className="fixed bottom-4 right-4 z-40 md:hidden">
+        <Button
+          onClick={() => setShowEnquiryModal(true)}
+          className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full p-4 shadow-2xl hover:from-blue-700 hover:to-blue-800"
+          size="lg"
+        >
+          <FileEdit className="w-6 h-6" />
+          <span className="ml-2 font-bold">Enquire</span>
+        </Button>
       </div>
     </div>
   );
