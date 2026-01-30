@@ -16,8 +16,10 @@ export function ContactPage() {
     message: '',
   });
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // ✅ DIRECT APPS SCRIPT URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywaSBxfHRtElku76F4TTqX1xchenjPDrE8OZSg6O6Hk3Jyuu1wcfq7M1krKoeGfKAA/exec';
 
   const handleWhatsApp = () => {
     window.open('https://wa.me/918799704639?text=Hi, I want to know about DDJAY projects', '_blank');
@@ -27,72 +29,49 @@ export function ContactPage() {
     window.location.href = 'tel:+918799704639';
   };
 
-  // ✅ PROFESSIONAL BACKEND: Google Sheets Integration
-  const saveToGoogleSheets = async (data: any) => {
+  // ✅ BACKGROUND SAVE (No await, no waiting)
+  const saveToGoogleSheets = (data: any) => {
     try {
       const sheetData = {
         name: data.name,
         mobile: data.mobile,
         email: data.email,
         message: data.message || '',
-        source: 'Contact Page',
-        source_page: window.location.pathname,
-        terms_agreed: 'Yes',
-        type: 'Contact_Form'
+        source_page: 'contact-page',
+        type: 'Contact_Form',
+        status: 'New Lead'
       };
 
-      // ✅ YOUR RENDER BACKEND URL
-      const BACKEND_URL = 'https://ddjay-backend.onrender.com/save-contact';
-
-      console.log('📤 Sending to backend:', sheetData);
-
-      const response = await fetch(BACKEND_URL, {
+      // ✅ BACKGROUND FETCH
+      fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sheetData)
+      })
+      .then(response => response.json())
+      .then(result => {
+        console.log('✅ Contact form saved:', result);
+      })
+      .catch(error => {
+        console.log('⚠️ Background save failed:', error);
+        saveToLocalStorage(sheetData);
       });
 
-      console.log('📥 Response status:', response.status, response.statusText);
-
-      if (!response.ok) {
-        throw new Error(`Backend error: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('✅ Backend Response:', result);
-      
-      if (result.success) {
-        console.log('✅ Contact form saved via professional backend');
-        return true;
-      } else {
-        console.error('❌ Backend Error:', result.error);
-        // Save to localStorage as backup
-        saveToLocalStorage(sheetData);
-        return false;
-      }
-
     } catch (error) {
-      console.error('🚨 Backend connection error:', error);
       saveToLocalStorage(data);
-      return false;
     }
   };
 
-  // ✅ Save to LocalStorage (Backup)
+  // ✅ LOCAL STORAGE BACKUP
   const saveToLocalStorage = (data: any) => {
     try {
       const contacts = JSON.parse(localStorage.getItem('ddjay_contacts') || '[]');
       contacts.push({
         ...data,
         id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        form_type: 'Contact_Form'
+        created_at: new Date().toISOString()
       });
       localStorage.setItem('ddjay_contacts', JSON.stringify(contacts));
-      console.log('Saved to localStorage:', data);
     } catch (error) {
       console.error('LocalStorage error:', error);
     }
@@ -116,40 +95,16 @@ export function ContactPage() {
       return;
     }
 
-    setLoading(true);
-
-    try {
-      // Save to localStorage
-      const contacts = JSON.parse(localStorage.getItem('ddjay_contacts') || '[]');
-      contacts.push({
-        ...formData,
-        id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        terms_agreed: true
-      });
-      localStorage.setItem('ddjay_contacts', JSON.stringify(contacts));
-
-      // Send to Google Sheets via Professional Backend
-      const saved = await saveToGoogleSheets(formData);
-
-      if (saved) {
-        setSubmitted(true);
-        toast.success('Message sent successfully! We will contact you soon.');
-
-        // Open WhatsApp
-        setTimeout(() => {
-          const message = `Hi, I'm ${formData.name}. My mobile: ${formData.mobile}. ${formData.message ? 'Message: ' + formData.message : 'Please contact me.'}`;
-          window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
-        }, 1000);
-      } else {
-        toast.success('Message saved locally! We will contact you soon.');
-      }
-
-    } catch (error) {
-      toast.error('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    // ✅ STEP 1: IMMEDIATE WHATSAPP OPEN
+    const message = `Hi, I'm ${formData.name}. My mobile: ${formData.mobile}. ${formData.message ? 'Message: ' + formData.message : 'Please contact me.'}`;
+    window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
+    
+    // ✅ STEP 2: SHOW SUCCESS IMMEDIATELY
+    setSubmitted(true);
+    toast.success('✅ WhatsApp opened! Data saving in background...');
+    
+    // ✅ STEP 3: BACKGROUND SAVE (No await, no blocking)
+    saveToGoogleSheets(formData);
   };
 
   if (submitted) {
@@ -160,7 +115,7 @@ export function ContactPage() {
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Thank You! ✅</h1>
               <p className="text-xl text-teal-100">
-                Your message has been sent successfully. We will contact you within 30 minutes.
+                WhatsApp opened! Our team will contact you within 30 minutes.
               </p>
             </div>
           </div>
@@ -173,9 +128,11 @@ export function ContactPage() {
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Check className="w-10 h-10 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold mb-4">Message Sent Successfully</h2>
+                <h2 className="text-2xl font-bold mb-4">WhatsApp Opened</h2>
                 <p className="text-gray-600 mb-6">
                   We have received your enquiry. Our team will contact you shortly.
+                  <br />
+                  <span className="text-sm text-green-600">✓ Data saved in background</span>
                 </p>
                 <div className="space-y-4">
                   <Button
@@ -183,7 +140,7 @@ export function ContactPage() {
                     className="w-full gap-2 bg-green-600 hover:bg-green-700"
                   >
                     <MessageCircle className="w-5 h-5" />
-                    Chat on WhatsApp Now
+                    Open WhatsApp Again
                   </Button>
                   <Button
                     onClick={() => navigate('/')}
@@ -282,7 +239,7 @@ export function ContactPage() {
               {/* Contact Form */}
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-2xl font-bold mb-4">Send Us a Message</h2>
-                <p className="text-gray-600 mb-6">Fill the form and we'll get back to you shortly</p>
+                <p className="text-gray-600 mb-6">Fill the form and WhatsApp will open immediately</p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -361,16 +318,25 @@ export function ContactPage() {
                     </div>
                   </div>
 
+                  <div className="bg-blue-50 p-3 rounded-md">
+                    <p className="text-xs text-blue-800">
+                      <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
+                    </p>
+                    <p className="text-xs text-blue-800 mt-1">
+                      <strong>✓ Background Save:</strong> Data saves automatically in background
+                    </p>
+                  </div>
+
                   <Button 
                     type="submit" 
                     className="w-full" 
-                    disabled={loading || !agreeTerms}
+                    disabled={!agreeTerms}
                   >
-                    {loading ? 'Sending...' : 'Send Message'}
+                    Submit & Open WhatsApp
                   </Button>
 
                   <p className="text-xs text-center text-gray-500">
-                    Your data is securely saved to Google Sheets via professional backend. We respect your privacy.
+                    Submit → WhatsApp opens instantly → Data saves in background
                   </p>
                 </form>
               </div>

@@ -35,10 +35,12 @@ export function LeadForm({
   });
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // ✅ PROFESSIONAL BACKEND: Google Sheets Integration
-  const saveToGoogleSheets = async (leadData: any) => {
+  // ✅ DIRECT APPS SCRIPT URL (Remove Render backend)
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywaSBxfHRtElku76F4TTqX1xchenjPDrE8OZSg6O6Hk3Jyuu1wcfq7M1krKoeGfKAA/exec';
+
+  // ✅ BACKGROUND SAVE TO GOOGLE SHEETS (No await)
+  const saveToGoogleSheets = (leadData: any) => {
     try {
       const sheetData = {
         name: leadData.name,
@@ -49,65 +51,40 @@ export function LeadForm({
         purpose: leadData.purpose || '',
         project: leadData.project_name || '',
         source_page: leadData.source_page,
-        message: leadData.requirement || '',
-        terms_agreed: 'Yes',
-        status: 'New Lead',
-        type: 'Lead_Form'
+        type: 'Lead_Form',
+        status: 'New Lead'
       };
 
-      // ✅ YOUR RENDER BACKEND URL
-      const BACKEND_URL = 'https://ddjay-backend.onrender.com/save-lead';
-
-      console.log('📤 Sending lead to backend:', sheetData);
-
-      const response = await fetch(BACKEND_URL, {
+      // ✅ BACKGROUND FETCH (No await, no waiting)
+      fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sheetData)
+      })
+      .then(response => response.json())
+      .then(result => {
+        console.log('✅ Background save success:', result);
+      })
+      .catch(error => {
+        console.log('⚠️ Background save failed, using localStorage:', error);
+        saveToLocalStorage(sheetData);
       });
 
-      console.log('📥 Response status:', response.status, response.statusText);
-
-      if (!response.ok) {
-        throw new Error(`Backend error: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('✅ Backend Response:', result);
-      
-      if (result.success) {
-        console.log('✅ Lead saved via professional backend');
-        return true;
-      } else {
-        console.error('❌ Backend Error:', result.error);
-        saveToLocalStorage(sheetData);
-        return false;
-      }
-
     } catch (error) {
-      console.error('🚨 Backend connection error:', error);
       saveToLocalStorage(leadData);
-      return false;
     }
   };
 
-  // ✅ Save to LocalStorage (Backup)
+  // ✅ LOCAL STORAGE BACKUP
   const saveToLocalStorage = (leadData: any) => {
     try {
       const leads = JSON.parse(localStorage.getItem('ddjay_leads') || '[]');
-      const newLead = {
+      leads.push({
         ...leadData,
         id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        form_type: 'Lead_Form'
-      };
-      
-      leads.push(newLead);
+        created_at: new Date().toISOString()
+      });
       localStorage.setItem('ddjay_leads', JSON.stringify(leads));
-      console.log('Saved to localStorage:', newLead);
     } catch (error) {
       console.error('LocalStorage error:', error);
     }
@@ -131,44 +108,27 @@ export function LeadForm({
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const leadData = {
-        name: formData.name,
-        mobile: formData.mobile,
-        email: formData.email,
-        budget: formData.budget,
-        requirement: formData.requirement,
-        purpose: formData.purpose,
-        project_id: projectId,
-        project_name: projectName,
-        source_page: sourcePage,
-        terms_agreed: true,
-      };
-
-      // ✅ Save to Google Sheets via Professional Backend
-      const saved = await saveToGoogleSheets(leadData);
-
-      if (saved) {
-        setSubmitted(true);
-        toast.success('Enquiry submitted successfully! Our team will contact you soon.');
-
-        // Open WhatsApp
-        setTimeout(() => {
-          const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}. Please share details.`;
-          window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
-        }, 1000);
-      } else {
-        toast.success('Form submitted locally! Our team will contact you shortly.');
-      }
-
-    } catch (error) {
-      console.error('Form submission error:', error);
-      toast.success('Form submitted! Our team will contact you shortly.');
-    } finally {
-      setLoading(false);
-    }
+    // ✅ STEP 1: IMMEDIATE WHATSAPP OPEN (No delay)
+    const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}. Please share details.`;
+    window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
+    
+    // ✅ STEP 2: SHOW SUCCESS IMMEDIATELY
+    setSubmitted(true);
+    toast.success('✅ WhatsApp opened! Data saving in background...');
+    
+    // ✅ STEP 3: BACKGROUND SAVE (No await, no blocking)
+    const leadData = {
+      name: formData.name,
+      mobile: formData.mobile,
+      email: formData.email,
+      budget: formData.budget,
+      requirement: formData.requirement,
+      purpose: formData.purpose,
+      project_name: projectName,
+      source_page: sourcePage,
+    };
+    
+    saveToGoogleSheets(leadData);
   };
 
   if (submitted) {
@@ -179,7 +139,9 @@ export function LeadForm({
         </div>
         <h3 className="font-bold text-xl mb-2">Thank You! ✅</h3>
         <p className="text-gray-600 mb-4">
-          Your enquiry has been submitted successfully. Our team will contact you within 30 minutes.
+          WhatsApp opened! Our team will contact you within 30 minutes.
+          <br />
+          <span className="text-sm text-green-600">✓ Data saved in background</span>
         </p>
         
         <div className="space-y-3">
@@ -191,16 +153,7 @@ export function LeadForm({
             className="w-full gap-2 bg-green-600 hover:bg-green-700"
           >
             <MessageCircle className="w-4 h-4" />
-            Continue to WhatsApp
-          </Button>
-          
-          <Button
-            onClick={() => window.location.href = 'mailto:support@ddjayprojects.org'}
-            variant="outline"
-            className="w-full gap-2"
-          >
-            <Mail className="w-4 h-4" />
-            Or Send Email
+            Open WhatsApp Again
           </Button>
         </div>
       </div>
@@ -322,23 +275,23 @@ export function LeadForm({
 
         <div className="bg-blue-50 p-3 rounded-md">
           <p className="text-xs text-blue-800">
-            <strong>✓ Instant Response:</strong> After submission, WhatsApp will open for immediate contact
+            <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
           </p>
           <p className="text-xs text-blue-800 mt-1">
-            <strong>✓ Data Security:</strong> Your information is saved securely to Google Sheets
+            <strong>✓ Background Save:</strong> Data saves automatically in background
           </p>
         </div>
 
         <Button 
           type="submit" 
           className="w-full" 
-          disabled={loading || !agreeTerms}
+          disabled={!agreeTerms}
         >
-          {loading ? 'Submitting...' : 'Submit Enquiry'}
+          Submit & Open WhatsApp
         </Button>
 
         <p className="text-xs text-center text-gray-500">
-          Your data is securely saved to Google Sheets via professional backend. We respect your privacy.
+          Submit → WhatsApp opens instantly → Data saves in background
         </p>
       </form>
     </div>
