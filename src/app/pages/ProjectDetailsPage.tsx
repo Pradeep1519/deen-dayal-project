@@ -378,7 +378,7 @@ export function ProjectDetailsPage() {
             <div className={`bg-gradient-to-br ${headerColor} text-white rounded-xl shadow-lg p-6`}>
               <h3 className="text-xl font-bold mb-4 text-center">
                 {status === 'upcoming' ? 'Pre-register Now' : 
-                 status === 'closed' ? 'View Similar Projects' : 'Book Now'}
+                 status === 'closed' ? 'Enquirey For Management Quota' : 'Book Now'}
               </h3>
               <div className="space-y-3">
                 <Button 
@@ -391,7 +391,7 @@ export function ProjectDetailsPage() {
                   }}
                 >
                   {status === 'upcoming' ? '📝 Pre-register' : 
-                   status === 'closed' ? '🔍 Find Similar' : '📋 Book Now'}
+                   status === 'closed' ? '📩 Enquire Now' : '📋 Book Now'}
                 </Button>
                 
                 <Button 
