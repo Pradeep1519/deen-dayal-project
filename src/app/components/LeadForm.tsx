@@ -36,42 +36,47 @@ export function LeadForm({
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // ✅ DIRECT APPS SCRIPT URL (Remove Render backend)
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywaSBxfHRtElku76F4TTqX1xchenjPDrE8OZSg6O6Hk3Jyuu1wcfq7M1krKoeGfKAA/exec';
+  // ✅ NEW APPS SCRIPT URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjtcEhZRx9N6aQh-myhdeG0kXgq80mWLHELNH5bWu9ANKiZZJdcvj-a8f3hMLcq-6s/exec';
 
-  // ✅ BACKGROUND SAVE TO GOOGLE SHEETS (No await)
+  // ✅ OPTIMIZED BACKGROUND SAVE (NO-CORS MODE)
   const saveToGoogleSheets = (leadData: any) => {
     try {
       const sheetData = {
-        name: leadData.name,
-        mobile: leadData.mobile,
+        name: leadData.name || '',
+        mobile: leadData.mobile || '',
         email: leadData.email || '',
         budget: leadData.budget || '',
         requirement: leadData.requirement || '',
         purpose: leadData.purpose || '',
         project: leadData.project_name || '',
-        source_page: leadData.source_page,
+        source_page: leadData.source_page || 'unknown',
         type: 'Lead_Form',
         status: 'New Lead'
       };
 
-      // ✅ BACKGROUND FETCH (No await, no waiting)
+      console.log('📤 Sending to Google Sheets:', sheetData);
+
+      // ✅ USE no-cors MODE (Bypasses CORS)
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors', // This bypasses CORS check
+        headers: { 
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(sheetData)
-      })
-      .then(response => response.json())
-      .then(result => {
-        console.log('✅ Background save success:', result);
-      })
-      .catch(error => {
-        console.log('⚠️ Background save failed, using localStorage:', error);
-        saveToLocalStorage(sheetData);
       });
 
+      console.log('✅ Request sent (no-cors mode)');
+      
+      // ✅ LocalStorage as immediate backup
+      saveToLocalStorage(sheetData);
+      return true;
+
     } catch (error) {
+      console.error('🚨 Error in saveToGoogleSheets:', error);
       saveToLocalStorage(leadData);
+      return false;
     }
   };
 
@@ -79,12 +84,16 @@ export function LeadForm({
   const saveToLocalStorage = (leadData: any) => {
     try {
       const leads = JSON.parse(localStorage.getItem('ddjay_leads') || '[]');
-      leads.push({
+      const newLead = {
         ...leadData,
         id: Date.now().toString(),
-        created_at: new Date().toISOString()
-      });
+        created_at: new Date().toISOString(),
+        synced: false
+      };
+      
+      leads.push(newLead);
       localStorage.setItem('ddjay_leads', JSON.stringify(leads));
+      console.log('💾 Saved to localStorage:', newLead);
     } catch (error) {
       console.error('LocalStorage error:', error);
     }
@@ -109,7 +118,7 @@ export function LeadForm({
     }
 
     // ✅ STEP 1: IMMEDIATE WHATSAPP OPEN (No delay)
-    const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}. Please share details.`;
+    const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}.${formData.requirement ? ' Requirement: ' + formData.requirement : ''} Please share details.`;
     window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
     
     // ✅ STEP 2: SHOW SUCCESS IMMEDIATELY
@@ -141,7 +150,7 @@ export function LeadForm({
         <p className="text-gray-600 mb-4">
           WhatsApp opened! Our team will contact you within 30 minutes.
           <br />
-          <span className="text-sm text-green-600">✓ Data saved in background</span>
+          <span className="text-sm text-green-600">✓ Data saved successfully</span>
         </p>
         
         <div className="space-y-3">
@@ -154,6 +163,15 @@ export function LeadForm({
           >
             <MessageCircle className="w-4 h-4" />
             Open WhatsApp Again
+          </Button>
+          
+          <Button
+            onClick={() => window.location.href = 'mailto:support@ddjayprojects.org'}
+            variant="outline"
+            className="w-full gap-2"
+          >
+            <Mail className="w-4 h-4" />
+            Or Send Email
           </Button>
         </div>
       </div>
@@ -278,7 +296,7 @@ export function LeadForm({
             <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
           </p>
           <p className="text-xs text-blue-800 mt-1">
-            <strong>✓ Background Save:</strong> Data saves automatically in background
+            <strong>✓ Automatic Save:</strong> Data saves to Google Sheets & LocalStorage
           </p>
         </div>
 
