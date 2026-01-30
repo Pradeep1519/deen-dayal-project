@@ -36,67 +36,31 @@ export function LeadForm({
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // ✅ NEW APPS SCRIPT URL
+  // ✅ FINAL APPS SCRIPT URL
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjtcEhZRx9N6aQh-myhdeG0kXgq80mWLHELNH5bWu9ANKiZZJdcvj-a8f3hMLcq-6s/exec';
 
-  // ✅ OPTIMIZED BACKGROUND SAVE (NO-CORS MODE)
+  // ✅ GOOGLE SHEETS SAVE ONLY (NO LOCALSTORAGE)
   const saveToGoogleSheets = (leadData: any) => {
-    try {
-      const sheetData = {
-        name: leadData.name || '',
-        mobile: leadData.mobile || '',
-        email: leadData.email || '',
-        budget: leadData.budget || '',
-        requirement: leadData.requirement || '',
-        purpose: leadData.purpose || '',
-        project: leadData.project_name || '',
-        source_page: leadData.source_page || 'unknown',
-        type: 'Lead_Form',
-        status: 'New Lead'
-      };
+    const sheetData = {
+      name: leadData.name || '',
+      mobile: leadData.mobile || '',
+      email: leadData.email || '',
+      budget: leadData.budget || '',
+      requirement: leadData.requirement || '',
+      purpose: leadData.purpose || '',
+      project: leadData.project_name || '',
+      source_page: leadData.source_page || 'unknown',
+      type: 'Lead_Form',
+      status: 'New Lead'
+    };
 
-      console.log('📤 Sending to Google Sheets:', sheetData);
-
-      // ✅ USE no-cors MODE (Bypasses CORS)
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // This bypasses CORS check
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sheetData)
-      });
-
-      console.log('✅ Request sent (no-cors mode)');
-      
-      // ✅ LocalStorage as immediate backup
-      saveToLocalStorage(sheetData);
-      return true;
-
-    } catch (error) {
-      console.error('🚨 Error in saveToGoogleSheets:', error);
-      saveToLocalStorage(leadData);
-      return false;
-    }
-  };
-
-  // ✅ LOCAL STORAGE BACKUP
-  const saveToLocalStorage = (leadData: any) => {
-    try {
-      const leads = JSON.parse(localStorage.getItem('ddjay_leads') || '[]');
-      const newLead = {
-        ...leadData,
-        id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        synced: false
-      };
-      
-      leads.push(newLead);
-      localStorage.setItem('ddjay_leads', JSON.stringify(leads));
-      console.log('💾 Saved to localStorage:', newLead);
-    } catch (error) {
-      console.error('LocalStorage error:', error);
-    }
+    // ✅ Send to Google Sheets (no-cors mode)
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sheetData)
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,15 +81,15 @@ export function LeadForm({
       return;
     }
 
-    // ✅ STEP 1: IMMEDIATE WHATSAPP OPEN (No delay)
+    // ✅ IMMEDIATE WHATSAPP OPEN
     const message = `Hi, I'm ${formData.name}. I'm interested in ${projectName || 'DDJAY projects'}. My mobile: ${formData.mobile}.${formData.requirement ? ' Requirement: ' + formData.requirement : ''} Please share details.`;
     window.open(`https://wa.me/918799704639?text=${encodeURIComponent(message)}`, '_blank');
     
-    // ✅ STEP 2: SHOW SUCCESS IMMEDIATELY
+    // ✅ SHOW SUCCESS IMMEDIATELY
     setSubmitted(true);
-    toast.success('✅ WhatsApp opened! Data saving in background...');
+    toast.success('✅ WhatsApp opened! Our team will contact you shortly.');
     
-    // ✅ STEP 3: BACKGROUND SAVE (No await, no blocking)
+    // ✅ BACKGROUND SAVE TO GOOGLE SHEETS
     const leadData = {
       name: formData.name,
       mobile: formData.mobile,
@@ -296,7 +260,7 @@ export function LeadForm({
             <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
           </p>
           <p className="text-xs text-blue-800 mt-1">
-            <strong>✓ Automatic Save:</strong> Data saves to Google Sheets & LocalStorage
+            <strong>✓ Google Sheets Save:</strong> Data saves directly to Google Sheets
           </p>
         </div>
 
@@ -309,7 +273,7 @@ export function LeadForm({
         </Button>
 
         <p className="text-xs text-center text-gray-500">
-          Submit → WhatsApp opens instantly → Data saves in background
+          Submit → WhatsApp opens instantly → Data saves to Google Sheets
         </p>
       </form>
     </div>

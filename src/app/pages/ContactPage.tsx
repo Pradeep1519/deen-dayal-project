@@ -18,7 +18,7 @@ export function ContactPage() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // ✅ NEW APPS SCRIPT URL
+  // ✅ FINAL APPS SCRIPT URL
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjtcEhZRx9N6aQh-myhdeG0kXgq80mWLHELNH5bWu9ANKiZZJdcvj-a8f3hMLcq-6s/exec';
 
   const handleWhatsApp = () => {
@@ -29,61 +29,25 @@ export function ContactPage() {
     window.location.href = 'tel:+918799704639';
   };
 
-  // ✅ OPTIMIZED BACKGROUND SAVE (NO-CORS MODE)
+  // ✅ GOOGLE SHEETS SAVE ONLY (NO LOCALSTORAGE)
   const saveToGoogleSheets = (data: any) => {
-    try {
-      const sheetData = {
-        name: data.name || '',
-        mobile: data.mobile || '',
-        email: data.email || '',
-        message: data.message || '',
-        source_page: 'contact-page',
-        type: 'Contact_Form',
-        status: 'New Lead'
-      };
+    const sheetData = {
+      name: data.name || '',
+      mobile: data.mobile || '',
+      email: data.email || '',
+      message: data.message || '',
+      source_page: 'contact-page',
+      type: 'Contact_Form',
+      status: 'New Lead'
+    };
 
-      console.log('📤 Sending contact form:', sheetData);
-
-      // ✅ USE no-cors MODE (Bypasses CORS)
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // This bypasses CORS check
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sheetData)
-      });
-
-      console.log('✅ Contact request sent (no-cors mode)');
-      
-      // ✅ LocalStorage as immediate backup
-      saveToLocalStorage(sheetData);
-      return true;
-
-    } catch (error) {
-      console.error('🚨 Error saving contact:', error);
-      saveToLocalStorage(data);
-      return false;
-    }
-  };
-
-  // ✅ LOCAL STORAGE BACKUP
-  const saveToLocalStorage = (data: any) => {
-    try {
-      const contacts = JSON.parse(localStorage.getItem('ddjay_contacts') || '[]');
-      const newContact = {
-        ...data,
-        id: Date.now().toString(),
-        created_at: new Date().toISOString(),
-        synced: false
-      };
-      
-      contacts.push(newContact);
-      localStorage.setItem('ddjay_contacts', JSON.stringify(contacts));
-      console.log('💾 Saved contact to localStorage:', newContact);
-    } catch (error) {
-      console.error('LocalStorage error:', error);
-    }
+    // ✅ Send to Google Sheets only
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sheetData)
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,7 +74,7 @@ export function ContactPage() {
     
     // ✅ STEP 2: SHOW SUCCESS IMMEDIATELY
     setSubmitted(true);
-    toast.success('✅ WhatsApp opened! Data saving in background...');
+    toast.success('✅ WhatsApp opened! Our team will contact you shortly.');
     
     // ✅ STEP 3: BACKGROUND SAVE (No await, no blocking)
     saveToGoogleSheets(formData);
@@ -332,7 +296,7 @@ export function ContactPage() {
                       <strong>⚡ Instant WhatsApp:</strong> Opens immediately after submit
                     </p>
                     <p className="text-xs text-blue-800 mt-1">
-                      <strong>✓ Automatic Save:</strong> Data saves to Google Sheets & LocalStorage
+                      <strong>✓ Google Sheets Save:</strong> Data saves directly to Google Sheets
                     </p>
                   </div>
 
@@ -345,7 +309,7 @@ export function ContactPage() {
                   </Button>
 
                   <p className="text-xs text-center text-gray-500">
-                    Submit → WhatsApp opens instantly → Data saves in background
+                    Submit → WhatsApp opens instantly → Data saves to Google Sheets
                   </p>
                 </form>
               </div>
