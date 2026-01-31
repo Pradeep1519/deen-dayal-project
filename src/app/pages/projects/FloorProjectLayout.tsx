@@ -95,7 +95,7 @@ export const FloorProjectLayout = ({ project, navigate, getBackPage, handleWhats
                         <FileText className="w-5 h-5 text-blue-600" />
                         <span className="font-medium">{key.replace(/_/g, ' ').toUpperCase()}</span>
                       </div>
-                      <Download className="w-4 h-4 text-gray-400" />
+                      <Download className="w-4 h-4 text-gray-40" />
                     </a>
                   ))}
                 </div>

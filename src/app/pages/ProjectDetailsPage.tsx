@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/app/components/ui/button';
@@ -8,24 +8,123 @@ import {
   ArrowLeft, MapPin, Calendar, IndianRupee, CheckCircle, 
   FileText, Download, Phone, MessageSquare, Home, 
   Building, Car, Leaf, Shield, Droplets, Palette, Dumbbell,
-  ExternalLink, ChevronLeft, ChevronRight, User, MessageCircle,
-  Mail, FileEdit, X
+  ExternalLink, FileEdit, X, Mail
 } from 'lucide-react';
 import { getAllProjects } from '@/data/projects';
 import { LeadForm } from '@/app/components/LeadForm';
-import { toast } from 'sonner';
 
+// ✅ SEPARATE IMAGE SLIDER COMPONENT (PREVENTS FORM RESET)
+const ImageSlider = ({ images, projectName }: { images: string[], projectName: string }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => (prev + 1) % images.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [images]);
+
+  const nextImage = () => {
+    setCurrentImageIndex(prev => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex(prev => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Photo Gallery</h2>
+          <span className="text-gray-500">
+            {currentImageIndex + 1} / {images.length}
+          </span>
+        </div>
+        
+        {/* BIG IMAGE SLIDER */}
+        <div className="relative rounded-lg overflow-hidden mb-4">
+          <div className="aspect-[16/9] relative">
+            <img 
+              src={images[currentImageIndex]} 
+              alt={`${projectName} - Image ${currentImageIndex + 1}`}
+              className="w-full h-full object-cover transition-all duration-500"
+            />
+            
+            {images.length > 1 && (
+              <>
+                <button 
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                >
+                  ←
+                </button>
+                
+                <button 
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                >
+                  →
+                </button>
+                
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        
+        {/* THUMBNAIL PREVIEWS */}
+        {images.length > 1 && (
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+            {images.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => goToImage(index)}
+                className={`relative rounded-md overflow-hidden border-2 transition-all ${
+                  index === currentImageIndex 
+                    ? 'border-blue-500 scale-105' 
+                    : 'border-transparent hover:border-gray-300'
+                }`}
+              >
+                <img 
+                  src={img} 
+                  alt={`${projectName} - Thumbnail ${index + 1}`}
+                  className="w-full h-20 object-cover"
+                />
+                {index === currentImageIndex && (
+                  <div className="absolute inset-0 bg-blue-500/20" />
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ✅ MAIN COMPONENT
 export function ProjectDetailsPage() {
   const navigate = useNavigate();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false); // ✅ Modal state
-  const sliderRef = useRef<NodeJS.Timeout | null>(null);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const projectId = urlParams.get('id');
+    const showForm = urlParams.get('showForm');
     
     if (projectId) {
       const foundProject = getAllProjects().find(p => p.id === projectId);
@@ -34,23 +133,6 @@ export function ProjectDetailsPage() {
     
     setLoading(false);
   }, []);
-
-  // Auto slider
-  useEffect(() => {
-    if (project?.images && project.images.length > 1) {
-      sliderRef.current = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => 
-          (prevIndex + 1) % project.images.length
-        );
-      }, 5000);
-
-      return () => {
-        if (sliderRef.current) {
-          clearInterval(sliderRef.current);
-        }
-      };
-    }
-  }, [project]);
 
   const getBackPage = () => {
     if (!project) return '/';
@@ -74,26 +156,6 @@ export function ProjectDetailsPage() {
     window.location.href = `mailto:support@ddjayprojects.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  const nextImage = () => {
-    if (project?.images) {
-      setCurrentImageIndex((prevIndex) => 
-        (prevIndex + 1) % project.images.length
-      );
-    }
-  };
-
-  const prevImage = () => {
-    if (project?.images) {
-      setCurrentImageIndex((prevIndex) => 
-        (prevIndex - 1 + project.images.length) % project.images.length
-      );
-    }
-  };
-
-  const goToImage = (index: number) => {
-    setCurrentImageIndex(index);
-  };
-
   const getAmenityIcon = (iconName: string) => {
     const iconMap: { [key: string]: any } = {
       'building': <Building className="w-6 h-6" />,
@@ -114,13 +176,19 @@ export function ProjectDetailsPage() {
     if (!showEnquiryModal) return null;
 
     return (
-      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setShowEnquiryModal(false);
+          }
+        }}
+      >
         <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden relative">
-          {/* ✅ MODAL HEADER WITH X BUTTON */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <MessageCircle className="w-8 h-8" />
+                <MessageSquare className="w-8 h-8" />
                 <div>
                   <h2 className="text-2xl font-bold">Enquire About This Project</h2>
                   <p className="text-blue-100">{project.project_name} • {project.location}</p>
@@ -135,7 +203,6 @@ export function ProjectDetailsPage() {
             </div>
           </div>
           
-          {/* ✅ MODAL CONTENT - LEAD FORM */}
           <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
             <LeadForm
               projectId={project.id}
@@ -195,15 +262,15 @@ export function ProjectDetailsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* ✅ PROJECT-SPECIFIC SEO HEADER */}
+      {/* SEO HEADER */}
       <Helmet>
         <title>{`${project.project_name} | DDJAY Project in ${project.location} | ${project.price_range}`}</title>
-        <meta name="description" content={`${project.project_name} in ${project.location}. ${project.description.substring(0, 150)}... Price: ${project.price_range}, Plot sizes: ${project.plot_sizes.join(', ')}, Status: ${status}`} />
+        <meta name="description" content={`${project.project_name} in ${project.location}. ${project.description?.substring(0, 150) || ''}... Price: ${project.price_range}, Plot sizes: ${project.plot_sizes?.join(', ')}, Status: ${status}`} />
         <meta name="keywords" content={`${project.project_name}, ddjay ${project.location}, plots in ${project.location}, ${project.location} real estate, affordable housing ${project.location}`} />
         
         <meta property="og:title" content={`${project.project_name} | DDJAY Project`} />
-        <meta property="og:description" content={`${project.description.substring(0, 100)}... Price: ${project.price_range}`} />
-        <meta property="og:image" content={project.images[0]} />
+        <meta property="og:description" content={`${project.description?.substring(0, 100) || ''}... Price: ${project.price_range}`} />
+        <meta property="og:image" content={project.images?.[0]} />
         <meta property="og:url" content={`https://www.ddjayprojects.org/project-details?id=${project.id}`} />
         <meta property="og:type" content="realestate.property" />
         
@@ -212,9 +279,9 @@ export function ProjectDetailsPage() {
             "@context": "https://schema.org",
             "@type": "RealEstateListing",
             "name": project.project_name,
-            "description": project.description.substring(0, 200),
+            "description": project.description?.substring(0, 200) || "",
             "url": `https://www.ddjayprojects.org/project-details?id=${project.id}`,
-            "image": project.images[0],
+            "image": project.images?.[0],
             "address": {
               "@type": "PostalAddress",
               "addressLocality": project.location,
@@ -222,12 +289,12 @@ export function ProjectDetailsPage() {
               "addressCountry": "India"
             },
             "priceRange": project.price_range,
-            "numberOfRooms": project.plot_sizes.length.toString(),
-            "floorSize": project.plot_sizes.join(', '),
+            "numberOfRooms": project.plot_sizes?.length.toString() || "1",
+            "floorSize": project.plot_sizes?.join(', ') || "",
             "amenityFeature": project.highlights?.map((h: string) => ({
               "@type": "LocationFeatureSpecification",
               "name": h
-            })),
+            })) || [],
             "offers": {
               "@type": "Offer",
               "availability": status === 'live' ? 'https://schema.org/InStock' : 
@@ -285,74 +352,10 @@ export function ProjectDetailsPage() {
           {/* LEFT COLUMN - MAIN CONTENT */}
           <div className="lg:col-span-2 space-y-8">
             
-            {/* 1. BIG IMAGE SLIDER SECTION */}
-            {project.images && project.images.length > 0 && (
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold">Photo Gallery</h2>
-                    <span className="text-gray-500">
-                      {currentImageIndex + 1} / {project.images.length}
-                    </span>
-                  </div>
-                  
-                  {/* BIG IMAGE SLIDER */}
-                  <div className="relative rounded-lg overflow-hidden mb-4">
-                    <div className="aspect-[16/9] relative">
-                      <img 
-                        src={project.images[currentImageIndex]} 
-                        alt={`${project.project_name} - Image ${currentImageIndex + 1}`}
-                        className="w-full h-full object-cover transition-all duration-500"
-                      />
-                      
-                      <button 
-                        onClick={prevImage}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </button>
-                      
-                      <button 
-                        onClick={nextImage}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </button>
-                      
-                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                        {currentImageIndex + 1} / {project.images.length}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* THUMBNAIL PREVIEWS */}
-                  <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
-                    {project.images.map((img: string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => goToImage(index)}
-                        className={`relative rounded-md overflow-hidden border-2 transition-all ${
-                          index === currentImageIndex 
-                            ? 'border-blue-500 scale-105' 
-                            : 'border-transparent hover:border-gray-300'
-                        }`}
-                      >
-                        <img 
-                          src={img} 
-                          alt={`${project.project_name} - Thumbnail ${index + 1}`}
-                          className="w-full h-20 object-cover"
-                        />
-                        {index === currentImageIndex && (
-                          <div className="absolute inset-0 bg-blue-500/20" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* ✅ IMAGE SLIDER COMPONENT */}
+            <ImageSlider images={project.images || []} projectName={project.project_name} />
 
-            {/* 2. AMENITIES SECTION */}
+            {/* AMENITIES SECTION */}
             {(project.customConfig?.customAmenities || project.highlights) && (
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="p-6">
@@ -392,7 +395,7 @@ export function ProjectDetailsPage() {
               </div>
             )}
 
-            {/* 3. DESCRIPTION */}
+            {/* DESCRIPTION */}
             {project.description && (
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="p-6">
@@ -408,14 +411,14 @@ export function ProjectDetailsPage() {
           {/* RIGHT COLUMN - SIDEBAR */}
           <div className="space-y-6">
             
-            {/* ✅ UPDATED: ACTION BUTTONS WITH MODAL TRIGGER */}
+            {/* ACTION BUTTONS WITH MODAL TRIGGER */}
             <div className={`bg-gradient-to-br ${headerColor} text-white rounded-xl shadow-lg p-6`}>
               <h3 className="text-xl font-bold mb-4 text-center">
                 Quick Actions
               </h3>
               
               <div className="space-y-3">
-                {/* ✅ MAIN BUTTON: FILL ENQUIRY FORM (MODAL TRIGGER) */}
+                {/* MAIN BUTTON: FILL ENQUIRY FORM (MODAL TRIGGER) */}
                 <Button 
                   onClick={() => setShowEnquiryModal(true)}
                   className="w-full py-4 text-lg bg-white hover:bg-gray-100 font-bold"
@@ -607,10 +610,10 @@ export function ProjectDetailsPage() {
         </div>
       </div>
 
-      {/* ✅ MODAL COMPONENT */}
+      {/* MODAL COMPONENT */}
       <EnquiryModal />
 
-      {/* ✅ FLOATING WHATSAPP BUTTON */}
+      {/* FLOATING WHATSAPP BUTTON */}
       <div 
         onClick={handleWhatsApp}
         className="fixed bottom-4 left-4 z-40 bg-green-500 text-white p-3 rounded-full shadow-2xl cursor-pointer hover:bg-green-600 transition-all duration-300 hover:scale-110"
@@ -618,7 +621,7 @@ export function ProjectDetailsPage() {
         <MessageSquare className="w-6 h-6" />
       </div>
 
-      {/* ✅ FLOATING ENQUIRY BUTTON FOR MOBILE */}
+      {/* FLOATING ENQUIRY BUTTON FOR MOBILE */}
       <div className="fixed bottom-4 right-4 z-40 md:hidden">
         <Button
           onClick={() => setShowEnquiryModal(true)}
