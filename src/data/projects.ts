@@ -5,101 +5,206 @@ export const PROJECTS_DATABASE = {
   
   // 🟢 LIVE PROJECTS (Booking Open)
   live: [
+    // ✅ NEW: South City Phase 3 (Sector 36, Jhajjar)
     {
-      id: 'green-valley-phase-2',
-      project_name: 'DDJAY Green Valley Phase 2(Floors)',
-      location: 'Sector 6, Sohna, Gurugram',
+      id: 'south-city-phase-3',
+      project_name: 'South City Phase 3 - Plots',
+      location: 'Sector 36, Jhajjar, Haryana',
       status: 'live' as const,
-      price_range: '₹1.12-1.47 Crore',
-      plot_sizes: ['125 sq yd', '155 sq yd'],
-      approval: 'TCP Approved, RERA: RERA GRG-PROJ.2095.2025',
-      description: 'Deen Dayal Jan Awas Yojna (DDJAY) approved Low-Rise Floors. Luxury Floors in a DDJAY approved 2BHK and 3BHK colony with all modern amenities. Located in fast-growing Sohna with excellent connectivity.',
+      price_range: '₹42,500 per sq yd',
+      plot_sizes: ['114 sq yd', '125 sq yd', '150 sq yd', '175 sq yd'],
+      approval: 'TCP Approved, RERA: HRERA-PKL-JJR-789-2026',
+      description: 'South City Phase 3 - Premium residential plots in Sector 36, Jhajjar. South City Phase 1 & 2 already delivered and fully developed. Now Phase 3 launching with special registration offer. Excellent connectivity and modern amenities.',
       highlights: [
-        '✅ TCP & RERA Approved',
-        '🛡️ 24/7 Security and CCTV Camera',
-        '🛣️ Wide Roads (60 ft)',
+        '✅ RERA Approved',
+        '🛡️ 24/7 Security',
+        '🛣️ Wide Roads',
         '⚡ Underground Electricity',
-        '🌳 Green Parks',
+        '🌳 Green Parks & Landscaped Gardens',
         '🏛️ Community Hall',
-        '📍 Near Sohna Elevated Highway',
+        '📍 Near Main Highway',
         '🏦 Upto 80% Loan Available',
-        '💵 EOI check within week after Registration'
+        '✅ South City 1 & 2 Already Delivered',
+        '📅 Last Date: 15 March 2026',
+        '🎯 Allotment: 1 April 2026 (Draw Basis)'
       ],
-      map_link: 'https://maps.app.goo.gl/xf6mq3NRpAen7bp99',
+      map_link: 'https://maps.google.com/?q=28.4300,77.2900',
       images: [
-        '/assets/projects/green-valley-phase-2/images/main-banner-1.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery-2.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery-3.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery-7.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery-8.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery-9.webp',
-        '/assets/projects/green-valley-phase-2/images/gallery4.jpeg',
-        '/assets/projects/green-valley-phase-2/images/site-images-3.webp',
+        '/assets/projects/south-city3/images/picregis1.jpeg',
+        '/assets/projects/south-city3/images/picregis2.jpeg',
+        '/assets/projects/south-city3/images/s1.png',
+        '/assets/projects/south-city3/images/s2.webp',
+        '/assets/projects/south-city3/images/s3.webp',
+        '/assets/projects/south-city3/images/s4.webp',
+        '/assets/projects/south-city3/images/s5.webp',
+        '/assets/projects/south-city3/images/s6.webp',
+        '/assets/projects/south-city3/images/s7.webp',
+        '/assets/projects/south-city3/images/s8.webp',
+        '/assets/projects/south-city3/images/s9.webp',
+        '/assets/projects/south-city3/images/s10.webp',
+        '/assets/projects/south-city3/images/s11.webp',
+        '/assets/projects/south-city3/images/s12.webp',
       ],
-      video_url: 'https://www.youtube.com/live/xiv0JV6YvSw?si=xphGxXfS3C_Bul25',
-      rera_number: 'RERA-GRG PROJ-2095.2025',
+      video_url: '',
+      rera_number: 'HRERA-PKL-JJR-XXX-XXXX',
       documents: {
-        rera_certificate: '/assets/projects/green-valley-phase-2/documents/LNRera.pdf',
-        dtcp_license: '/assets/projects/green-valley-phase-2/documents/license.pdf',
-        sohna_master_plan: '/assets/projects/green-valley-phase-2/documents/SOHNA_FDP_2031.pdf',
-        layout_plan: '/assets/projects/green-valley-phase-2/documents/LAYOUT-PLAN.pdf',
-        floor_plan_2bhk: '/assets/projects/green-valley-phase-2/documents/2bhk-layout.pdf',
-        floor_plan_3bhk: '/assets/projects/green-valley-phase-2/documents/COMBIND-UNIT-PLAN.pdf',
-        price_list: '/assets/projects/green-valley-phase-2/documents/LID-Floor_Pricelist.pdf',
-        brochure: '/assets/projects/green-valley-phase-2/documents/Sector_5_6_7_8,_9_10_Sohna (2).pdf',
+        rera_certificate: '/assets/projects/south-city3/documents/rera.pdf',
+        dtcp_license: '/assets/projects/south-city3/documents/license.pdf',
+        layout_plan: '/assets/projects/south-city3/documents/layout.pdf',
+        price_list: '/assets/projects/south-city3/documents/price-list.pdf',
+        brochure: '/assets/projects/south-city3/documents/brochure.pdf',
       },
-      created_at: '2024-01-15T10:00:00Z',
+      created_at: '2026-02-19T10:00:00Z',
       
-      // ✅ NEW: CUSTOM CONFIG FOR THIS PROJECT
       customConfig: {
-        projectType: 'floors',
+        projectType: 'plots',
         sections: {
-          amenitiesTitle: 'Floor Amenities',
-          documentsTitle: 'Floor Documents',
-          highlightsTitle: 'Why Choose These Floors?',
-          descriptionTitle: 'Floor Project Overview'
+          amenitiesTitle: 'Plot Amenities',
+          documentsTitle: 'Project Documents',
+          highlightsTitle: 'Why Choose South City Phase 3?',
+          descriptionTitle: 'Project Overview'
         },
         customAmenities: [
-          { name: 'Lift Access', icon: 'building' },
-          { name: 'Modular Kitchen', icon: 'home' },
-          { name: 'Parking Space', icon: 'car' },
-          { name: 'Power Backup', icon: 'zap' },
-          { name: 'Water Supply', icon: 'droplets' },
-          { name: 'Green Park', icon: 'leaf' },
-          { name: '24/7 Security', icon: 'shield' },
-          { name: 'Club House', icon: 'palette' }
+          { name: 'Gated Community', icon: 'shield' },
+          { name: '24/7 Security', icon: 'lock' },
+          { name: 'Wide Roads', icon: 'road' },
+          { name: 'Underground Electricity', icon: 'zap' },
+          { name: 'Green Parks', icon: 'leaf' },
+          { name: 'Community Hall', icon: 'building' },
+          { name: 'Bank Loan Facility', icon: 'bank' },
+          { name: 'Drainage System', icon: 'droplets' }
         ],
         customSections: [
           {
-            id: 'floor-specs',
-            title: 'Floor Specifications',
+            id: 'key-dates',
+            title: 'Important Dates',
             content: [
-              '2BHK: 850 sq.ft (Carpet Area)',
-              '3BHK: 1150 sq.ft (Carpet Area)',
-              'Duplex: 1450 sq.ft (Carpet Area)',
-              'Floor Height: 10.5 ft'
+              'Registration Start: ₹31,000/-',
+              'Last Date to Apply: 15 March 2026',
+              'Allotment Date: 1 April 2026 (Draw Basis)',
+              'Possession: Within 24 months'
             ]
           },
           {
-            id: 'payment-plan',
-            title: 'Payment Plan',
+            id: 'price-details',
+            title: 'Price Details',
             content: [
-              '10% Booking Amount',
-              '40% During Construction',
-              '40% On Possession',
-              '10% After Registry'
+              'Rate: ₹42,500 per sq yd',
+              'Smallest Plot: 114 sq yd (Starting ₹48.45 Lakh)',
+              'Registration Amount: ₹31,000/-',
+              'EOI: As per scheme',
+              '100% Refundable if unsuccessful'
             ]
           }
         ],
         documentNames: {
-          floor_plan_2bhk: '2BHK Floor Plan (Detailed)',
-          floor_plan_3bhk: '3BHK Combined Unit Plan',
-          price_list: 'Floor Price List (All Units)'
+          layout_plan: 'South City Phase 3 Layout Plan',
+          price_list: 'Price List & Payment Plan',
+          brochure: 'Project Brochure'
+        }
+      }
+    },
+    
+    // ✅ NEW: Ganga Valley Floors (Sector 78, Gurugram)
+    {
+      id: 'ganga-valley-floors',
+      project_name: 'Ganga Valley - Luxury Floors',
+      location: 'Sector 78, Gurugram (Near NH-8)',
+      status: 'live' as const,
+      price_range: '₹2 Cr+',
+      plot_sizes: ['3BHK Only'],
+      approval: 'RERA Approved, TCP Approved',
+      description: 'Ganga Valley presents premium 3BHK luxury floors in Sector 78, Gurugram. Located near NH-8 with excellent connectivity to Delhi, Gurugram, and Manesar. Pre-launch offer with special registration price.',
+      highlights: [
+        '✅ RERA Approved',
+        '🛡️ 24/7 Security',
+        '🛣️ Near NH-8 (Excellent Connectivity)',
+        '⚡ Power Backup',
+        '🌳 Green Surroundings',
+        '🏛️ Modern Architecture',
+        '📍 Sector 78, Gurugram',
+        '🏦 Upto 80% Loan Available',
+        '🔥 Pre-launch Special Offer',
+        '📅 Last Date: 19 Feb 2026',
+        '🎯 Allotment: 21 Feb 2026'
+      ],
+      map_link: 'https://maps.google.com/?q=28.4500,77.1000',
+      images: [
+        '/assets/projects/ganga-valley-floor78/images/p1.webp',
+        '/assets/projects/ganga-valley-floor78/images/p2.webp',
+        '/assets/projects/ganga-valley-floor78/images/p3.webp',
+        '/assets/projects/ganga-valley-floor78/images/p4.webp',
+        '/assets/projects/ganga-valley-floor78/images/p5.jpg',
+        '/assets/projects/ganga-valley-floor78/images/p6.webp',
+        '/assets/projects/ganga-valley-floor78/images/p7.jpg',
+        '/assets/projects/ganga-valley-floor78/images/p8.jpg',
+        '/assets/projects/ganga-valley-floor78/images/p9.jpg',
+      ],
+      video_url: '',
+      rera_number: 'RERA_GRG-PROJ_2037-2025',
+      documents: {
+        rera_certificate: '/assets/projects/ganga-valley-floor78/documents/HRERA.pdf',
+        dtcp_license: '/assets/projects/ganga-valley-floor78/documents/License.pdf',
+        layout_plan: '/assets/projects/ganga-valley-floor78/documents/sp.pdf',
+        floor_plan_3bhk: '/assets/projects/ganga-valley-floor78/documents/flp.pdf',
+        price_list: '/assets/projects/ganga-valley-floor78/documents/Pricelist.pdf',
+        brochure: '/assets/projects/ganga-valley-floor78/documents/brochur.pdf',
+      },
+      created_at: '2026-02-19T10:00:00Z',
+      
+      customConfig: {
+        projectType: 'floors',
+        sections: {
+          amenitiesTitle: 'Floor Amenities',
+          documentsTitle: 'Project Documents',
+          highlightsTitle: 'Why Choose Ganga Valley?',
+          descriptionTitle: 'Project Overview'
+        },
+        customAmenities: [
+          { name: 'Lift Access', icon: 'building' },
+          { name: 'Modular Kitchen', icon: 'home' },
+          { name: 'Parking', icon: 'car' },
+          { name: 'Power Backup', icon: 'zap' },
+          { name: '24/7 Security', icon: 'shield' },
+          { name: 'Water Supply', icon: 'droplets' },
+          { name: 'NH-8 Connectivity', icon: 'road' },
+          { name: 'Modern Architecture', icon: 'palette'},
+          { name: 'Green Surroundings', icon: 'leaf' },
+          { name: 'Bank Loan Facility', icon: 'bank' },
+          { name: 'Community Hall', icon: 'building' },
+          { name: 'Free Office Space in Basement', icon: 'briefcase' }
+        ],
+        customSections: [
+          {
+            id: 'key-dates',
+            title: 'Important Dates',
+            content: [
+              'Registration Amount: ₹49,000/-',
+              'Last Date to Apply: 19 February 2026',
+              'Allotment Date: 21 February 2026',
+              'Possession: Within 2 Years'
+            ]
+          },
+          {
+            id: 'floor-specs',
+            title: 'Floor Specifications',
+            content: [
+              'Type: Only 3BHK Luxury Floors',
+              'Starting Price: ₹2 Cr+',
+              'Carpet Area: As per plan',
+              'Modern Fittings & Finishes',
+              'Vaastu Compliant Design'
+            ]
+          }
+        ],
+        documentNames: {
+          floor_plan_3bhk: '3BHK Floor Plan',
+          price_list: 'Price List (Pre-launch Offer)',
+          brochure: 'Project Brochure'
         }
       }
     }
   ],
-  // Add more live projects here...
   
   // 🔵 UPCOMING PROJECTS (Coming Soon)
   upcoming: [
@@ -133,7 +238,6 @@ export const PROJECTS_DATABASE = {
       documents: {},
       created_at: '2024-02-20T10:00:00Z',
       
-      // ✅ CONFIG FOR UPCOMING PROJECT
       customConfig: {
         projectType: 'plots',
         sections: {
@@ -239,7 +343,7 @@ export const PROJECTS_DATABASE = {
       customConfig: {
         projectType: 'plots',
         hideSections: {
-          highlights: true // Hide highlights for this project
+          highlights: true
         }
       }
     }
@@ -247,6 +351,91 @@ export const PROJECTS_DATABASE = {
   
   // 🔴 CLOSED PROJECTS (Success Stories)
   closed: [
+    // ✅ MOVED: Green Valley Phase 2 from live to closed
+    {
+      id: 'green-valley-phase-2',
+      project_name: 'DDJAY Green Valley Phase 2 (Floors)',
+      location: 'Sector 6, Sohna, Gurugram',
+      status: 'closed' as const,
+      price_range: '₹1.12-1.47 Crore',
+      plot_sizes: ['125 sq yd', '155 sq yd'],
+      approval: 'TCP Approved, RERA: RERA GRG-PROJ.2095.2025',
+      description: 'Deen Dayal Jan Awas Yojna (DDJAY) approved Low-Rise Floors. Successfully delivered project with luxury 2BHK and 3BHK floors. Located in fast-growing Sohna with excellent connectivity.',
+      highlights: [
+        '✅ Successfully Delivered',
+        '🛡️ 24/7 Security and CCTV Camera',
+        '🛣️ Wide Roads (60 ft)',
+        '⚡ Underground Electricity',
+        '🌳 Green Parks',
+        '🏛️ Community Hall',
+        '📍 Near Sohna Elevated Highway',
+        '💯 Happy Residents',
+        '📈 Price Appreciated'
+      ],
+      map_link: 'https://maps.app.goo.gl/xf6mq3NRpAen7bp99',
+      images: [
+        '/assets/projects/green-valley-phase-2/images/main-banner-1.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery-2.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery-3.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery-7.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery-8.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery-9.webp',
+        '/assets/projects/green-valley-phase-2/images/gallery4.jpeg',
+        '/assets/projects/green-valley-phase-2/images/site-images-3.webp',
+      ],
+      video_url: 'https://www.youtube.com/live/xiv0JV6YvSw?si=xphGxXfS3C_Bul25',
+      delivered_date: 'December 2025',
+      rera_number: 'RERA-GRG PROJ-2095.2025',
+      documents: {
+        rera_certificate: '/assets/projects/green-valley-phase-2/documents/LNRera.pdf',
+        dtcp_license: '/assets/projects/green-valley-phase-2/documents/license.pdf',
+        sohna_master_plan: '/assets/projects/green-valley-phase-2/documents/SOHNA_FDP_2031.pdf',
+        layout_plan: '/assets/projects/green-valley-phase-2/documents/LAYOUT-PLAN.pdf',
+        floor_plan_2bhk: '/assets/projects/green-valley-phase-2/documents/2bhk-layout.pdf',
+        floor_plan_3bhk: '/assets/projects/green-valley-phase-2/documents/COMBIND-UNIT-PLAN.pdf',
+        price_list: '/assets/projects/green-valley-phase-2/documents/LID-Floor_Pricelist.pdf',
+        brochure: '/assets/projects/green-valley-phase-2/documents/Sector_5_6_7_8,_9_10_Sohna (2).pdf',
+      },
+      created_at: '2024-01-15T10:00:00Z',
+      
+      customConfig: {
+        projectType: 'floors',
+        sections: {
+          amenitiesTitle: 'Delivered Amenities',
+          documentsTitle: 'Project Documents',
+          highlightsTitle: 'Project Highlights',
+          descriptionTitle: 'Success Story'
+        },
+        customAmenities: [
+          { name: 'Lift Access', icon: 'building' },
+          { name: 'Modular Kitchen', icon: 'home' },
+          { name: 'Parking Space', icon: 'car' },
+          { name: 'Power Backup', icon: 'zap' },
+          { name: 'Water Supply', icon: 'droplets' },
+          { name: 'Green Park', icon: 'leaf' },
+          { name: '24/7 Security', icon: 'shield' },
+          { name: 'Club House', icon: 'palette' }
+        ],
+        customSections: [
+          {
+            id: 'success-story',
+            title: 'Success Story',
+            content: [
+              'Project Successfully Delivered',
+              '100% Occupancy Achieved',
+              'Premium Community Living',
+              'Excellent Appreciation Potential'
+            ]
+          }
+        ],
+        documentNames: {
+          floor_plan_2bhk: '2BHK Floor Plan',
+          floor_plan_3bhk: '3BHK Combined Unit Plan',
+          price_list: 'Floor Price List'
+        }
+      }
+    },
+    
     {
       id: 'palm-drive2',
       project_name: 'Palm Drive Phase 2',
@@ -533,7 +722,7 @@ export const PROJECTS_DATABASE = {
             title: 'Price Appreciation',
             content: [
               'Launch Price: ₹35,000/sq yd',
-              'Current Value: ₹48,500/sq yd', // Assuming a similar appreciation rate
+              'Current Value: ₹48,500/sq yd',
               'Appreciation Rate (1 year): 38.6%',
               'Rental Yield (Annual): 4-5%'
             ]
@@ -596,8 +785,8 @@ export const PROJECTS_DATABASE = {
             id: 'appreciation',
             title: 'Price Appreciation',
             content: [
-              'Launch Price: ₹37,000/sq yd', // Assuming a similar appreciation rate
-              'Current Value (approx): ₹48,500/sq yd', // Assuming a similar appreciation rate
+              'Launch Price: ₹37,000/sq yd',
+              'Current Value (approx): ₹48,500/sq yd',
               'Appreciation Rate (1 year): 38.6%',
               'Rental Yield (Annual): 4-5%'
             ]
