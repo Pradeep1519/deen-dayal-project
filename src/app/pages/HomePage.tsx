@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async'; // ✅ NEW: Import Helmet
+import { Helmet } from 'react-helmet-async';
 import { Search, MapPin, TrendingUp, BadgeCheck, CheckCircle, ArrowRight, Shield, Users, Clock, Award, AlertCircle, Building2, IndianRupee, Maximize2 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -29,7 +29,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* ✅ SEO HEADER - Ye sabse pehle add karo */}
+      {/* SEO HEADER */}
       <Helmet>
         <title>DDJAY Projects | Deen Dayal Jan Awas Yojana | Haryana Affordable Housing</title>
         <meta name="description" content="Verified DDJAY projects under Deen Dayal Jan Awas Yojana. Book plots in Gurugram, Sohna, Pataudi, Faridabad. Government approved affordable housing scheme." />
@@ -47,7 +47,7 @@ export function HomePage() {
         <meta name="twitter:title" content="DDJAY Projects | Deen Dayal Jan Awas Yojana" />
         <meta name="twitter:description" content="Book affordable plots in Haryana under DDJAY scheme" />
         
-        {/* ✅ IMPORTANT: JSON-LD Structured Data for Google */}
+        {/* JSON-LD Structured Data for Google */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -189,12 +189,17 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {liveProjects.map(project => {
               const isGreenValley = project.id === 'green-valley-phase-2';
+              const isSouthCity3 = project.id === 'south-city-phase-3';
+              const isGangaValley = project.id === 'ganga-valley-floors';
               
               return (
                 <div 
                   key={project.id} 
                   className={`bg-white rounded-xl border-2 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
-                    isGreenValley ? 'border-green-300 ring-2 ring-green-200' : 'border-gray-200'
+                    isGreenValley ? 'border-green-300 ring-2 ring-green-200' : 
+                    isSouthCity3 ? 'border-purple-300 ring-2 ring-purple-200' :
+                    isGangaValley ? 'border-blue-300 ring-2 ring-blue-200' :
+                    'border-gray-200'
                   }`}
                 >
                   <div 
@@ -218,9 +223,24 @@ export function HomePage() {
                        project.status === 'upcoming' ? 'COMING SOON' : 'SOLD OUT'}
                     </div>
                     
+                    {/* Green Valley Phase 2 Banner */}
                     {isGreenValley && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-red-600 to-orange-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
-                        🚨 Last Date: 15th Feb 2026
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-green-600 to-emerald-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                        📅 Allotment: 15 & 16 March 2026
+                      </div>
+                    )}
+                    
+                    {/* South City Phase 3 Banner */}
+                    {isSouthCity3 && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-indigo-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                        📅 Last Date: 15 March | Allotment: 1 April 2026
+                      </div>
+                    )}
+                    
+                    {/* Ganga Valley Floors Banner */}
+                    {isGangaValley && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                        📅 Last Date: Coming Soon | Allotment: Coming Soon
                       </div>
                     )}
                   </div>
@@ -255,7 +275,7 @@ export function HomePage() {
                       </div>
                     </div>
                     
-                    {isGreenValley && project.highlights.slice(0, 2).map((highlight, index) => (
+                    {(isGreenValley || isSouthCity3) && project.highlights.slice(0, 2).map((highlight, index) => (
                       <div key={index} className="flex items-start gap-2 mb-1">
                         <AlertCircle className="w-3 h-3 text-red-500 mt-1 flex-shrink-0" />
                         <span className="text-xs text-gray-700 font-medium">{highlight}</span>

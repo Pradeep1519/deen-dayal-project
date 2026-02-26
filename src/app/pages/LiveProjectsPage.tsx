@@ -100,7 +100,7 @@ export function LiveProjectsPage() {
     navigate(`/project-details?id=${projectId}`);
   };
 
-  // ✅ NEW: Quick Enquiry with Form Open
+  // ✅ Quick Enquiry with Form Open
   const handleQuickEnquiry = (project: Project) => {
     navigate(`/project-details?id=${project.id}&showForm=true`);
   };
@@ -279,11 +279,18 @@ export function LiveProjectsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProjects.map(project => {
                   const isGreenValley = project.id === 'green-valley-phase-2';
+                  const isSouthCity3 = project.id === 'south-city-phase-3';
+                  const isGangaValley = project.id === 'ganga-valley-floors';
 
                   return (
                     <div 
                       key={project.id} 
-                      className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 group"
+                      className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 hover:shadow-xl transition-all duration-300 group ${
+                        isGreenValley ? 'border-green-300 ring-2 ring-green-200' : 
+                        isSouthCity3 ? 'border-purple-300 ring-2 ring-purple-200' :
+                        isGangaValley ? 'border-blue-300 ring-2 ring-blue-200' :
+                        'border-gray-200'
+                      }`}
                       itemScope
                       itemType="https://schema.org/RealEstateListing"
                     >
@@ -300,14 +307,28 @@ export function LiveProjectsPage() {
                         />
                         
                         {/* Status Badge */}
-                        <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                           BOOKING OPEN
                         </div>
                         
-                        {/* Special Alert for Green Valley */}
+                        {/* Green Valley Phase 2 Banner */}
                         {isGreenValley && (
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-red-600 to-orange-500 text-white text-center py-2 px-4 text-sm font-bold">
-                            🚨 Last Date: 15th Feb 2026
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-green-600 to-emerald-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                            📅 Allotment: 15 & 16 March 2026
+                          </div>
+                        )}
+                        
+                        {/* South City Phase 3 Banner */}
+                        {isSouthCity3 && (
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-indigo-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                            📅 Last Date: 15 March | Allotment: 1 April 2026
+                          </div>
+                        )}
+                        
+                        {/* Ganga Valley Floors Banner */}
+                        {isGangaValley && (
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
+                            📅 Last Date: Coming Soon | Allotment: Coming Soon
                           </div>
                         )}
                       </div>
@@ -326,7 +347,8 @@ export function LiveProjectsPage() {
                         </div>
                         
                         <h3 
-                          className="text-xl font-bold text-gray-900 mb-2"
+                          className="text-xl font-bold text-gray-900 mb-2 cursor-pointer hover:text-blue-600"
+                          onClick={() => handleProjectClick(project.id)}
                           itemProp="name"
                         >
                           {project.project_name}
@@ -362,7 +384,7 @@ export function LiveProjectsPage() {
                           </div>
                         ))}
                         
-                        {/* ✅ UPDATED: Action Buttons with Quick Enquiry */}
+                        {/* ✅ Action Buttons with Quick Enquiry */}
                         <div className="flex gap-2 mt-4">
                           <Button
                             onClick={() => handleProjectClick(project.id)}
