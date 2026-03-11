@@ -25,7 +25,7 @@ export const PROJECTS_DATABASE = {
         '📍 Near Sohna Elevated Highway',
         '🏦 Upto 80% Loan Available',
         '💵 EOI check within week after Registration',
-        '📅 Allotment: 15 & 16 March 2026'
+        '📅 Allotment: 31 March 2026'
       ],
       map_link: 'https://maps.app.goo.gl/xf6mq3NRpAen7bp99',
       images: [
