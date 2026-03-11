@@ -226,7 +226,7 @@ export function HomePage() {
                     {/* Green Valley Phase 2 Banner */}
                     {isGreenValley && (
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-green-600 to-emerald-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
-                        📅 Allotment: 15 & 16 March 2026
+                        📅 Allotment: 31 March 2026
                       </div>
                     )}
                     

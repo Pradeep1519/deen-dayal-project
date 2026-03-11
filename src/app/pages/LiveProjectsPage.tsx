@@ -314,14 +314,14 @@ export function LiveProjectsPage() {
                         {/* Green Valley Phase 2 Banner */}
                         {isGreenValley && (
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-green-600 to-emerald-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
-                            📅 Allotment: 15 & 16 March 2026
+                            📅 Allotment: 31 March 2026
                           </div>
                         )}
                         
                         {/* South City Phase 3 Banner */}
                         {isSouthCity3 && (
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-indigo-500 text-white text-center py-2 px-4 text-sm font-bold animate-pulse">
-                            📅 Last Date: 15 March | Allotment: 1 April 2026
+                            📅 Last Date: 31 March | Allotment: 1 April 2026
                           </div>
                         )}
                         
